@@ -1,4 +1,4 @@
-module SvgSnippets exposing (CameraConstants, DrawConstants, DrawInfo, LevelBoundary, PositionConstants, iso_tile, level_boundary, standard_background, stringy_viewbox)
+module SvgSnippets exposing (CameraConstants, DrawConstants, DrawInfo, LevelBoundary, PositionConstants, clr_iso_tile, level_boundary, standard_background, stringy_viewbox)
 
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -59,6 +59,14 @@ type alias PositionConstants =
     }
 
 
+type alias TileDrawConstants =
+    { c : Int
+    , v : Int
+    , w : Int
+    , h : Int
+    }
+
+
 type alias DrawConstants =
     { vstr : String
     , mvstr : String
@@ -75,32 +83,65 @@ type alias DrawInfo =
     }
 
 
-iso_tile : Int -> Int -> Svg msg
-iso_tile x y =
+tile_draw_constants : TileDrawConstants
+tile_draw_constants =
+    TileDrawConstants 16 2 3 7
+
+
+draw_constants : DrawConstants
+draw_constants =
+    let
+        int_constants =
+            tile_draw_constants
+    in
+    DrawConstants
+        (String.fromInt (int_constants.v * int_constants.c))
+        (String.fromInt (-int_constants.v * int_constants.c))
+        (String.fromInt (int_constants.w * int_constants.c))
+        (String.fromInt (-int_constants.w * int_constants.c))
+        (String.fromInt (int_constants.h * int_constants.c))
+        (String.fromInt (-int_constants.h * int_constants.c))
+
+
+iso_position : LevelBoundary -> Int -> Int -> PositionConstants
+iso_position bdy row col =
     let
         csts =
-            { c = 16, v = 2, w = 3, h = 5, ax = x, ay = y }
+            tile_draw_constants
 
-        tstr_constants { c, v, w, h, ax, ay } =
+        grid_step_x =
+            2 * csts.c * csts.w
+
+        grid_step_y =
+            csts.c * csts.v
+
+        x =
+            grid_step_x * col + modBy 2 row * csts.c * csts.w
+
+        y =
+            grid_step_y * row
+
+        bdy_offset_l =
+            bdy.level_boundary.left + floor (0.5 * toFloat csts.c * toFloat csts.w)
+
+        bdy_offset_t =
+            bdy.level_boundary.top + csts.c * csts.h
+    in
+    PositionConstants
+        (String.fromInt (bdy_offset_l + x))
+        (String.fromInt (bdy_offset_t + y))
+
+
+clr_iso_tile : LevelBoundary -> String -> Int -> Int -> Svg msg
+clr_iso_tile bdy clr x y =
+    let
+        tstr_constants { ax, ay } =
             DrawInfo
-                (PositionConstants
-                    (String.fromInt ax)
-                    (String.fromInt ay)
-                )
-                (DrawConstants
-                    (String.fromInt (v * c))
-                    (String.fromInt (-v * c))
-                    (String.fromInt (w * c))
-                    (String.fromInt (-w * c))
-                    (String.fromInt (h * c))
-                    (String.fromInt (-h * c))
-                )
+                (iso_position bdy ax ay)
+                draw_constants
 
         c_info =
-            tstr_constants csts
-
-        tile_draw =
-            String.concat [ "" ]
+            tstr_constants { ax = x, ay = y }
 
         tile_ceil_from_bc info =
             String.concat
@@ -195,8 +236,8 @@ iso_tile x y =
 
         res =
             Svg.path
-                [ fill "#26210060"
-                , stroke "#111f"
+                [ fill clr
+                , stroke "#000f"
                 , strokeWidth "2"
                 , Svg.Attributes.d (tile_from_bc c_info)
                 ]

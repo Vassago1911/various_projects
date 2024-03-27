@@ -4,20 +4,13 @@ import Browser exposing (document)
 import Content exposing (content)
 import HtmlSnippets
     exposing
-        ( prestyle
-        , svg_to_html_frame
-        , view_model
-        , view_model_type
+        ( view_model_type
         )
 import Svg exposing (Svg)
 import SvgSnippets
     exposing
         ( CameraConstants
-        , DrawConstants
-        , DrawInfo
         , LevelBoundary
-        , PositionConstants
-        , iso_tile
         )
 
 
@@ -28,7 +21,7 @@ type Msg
 type alias Model =
     { level_boundary : LevelBoundary
     , camera : CameraConstants
-    , content : List (Svg Msg)
+    , content : LevelBoundary -> List (Svg Msg)
     , title : String
     }
 

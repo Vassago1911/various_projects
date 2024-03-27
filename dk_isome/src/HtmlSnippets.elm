@@ -43,7 +43,7 @@ svg_to_html_frame ccs lvl content =
 type alias Model msg =
     { level_boundary : LevelBoundary
     , camera : CameraConstants
-    , content : List (Svg.Svg msg)
+    , content : LevelBoundary -> List (Svg.Svg msg)
     , title : String
     }
 
@@ -53,7 +53,7 @@ view_model_type model =
     view_piper model.level_boundary model.camera model.title model.content
 
 
-view_piper : LevelBoundary -> CameraConstants -> String -> List (Svg.Svg msg) -> Document msg
+view_piper : LevelBoundary -> CameraConstants -> String -> (LevelBoundary -> List (Svg.Svg msg)) -> Document msg
 view_piper lvl ccs ttl cont =
     let
         std_content =
@@ -67,7 +67,7 @@ view_piper lvl ccs ttl cont =
             , body =
                 svg_frame
                     (std_content
-                        ++ cont
+                        ++ cont lvl
                     )
             }
     in
