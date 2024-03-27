@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><meta charset="UTF-8">
+
+<head></head>
+
+<body>
+<svg id="main_svg" xmlns="http://www.w3.org/2000/svg" margin="max(4px,1vh,1vw)" viewBox="0 0 2048 2048">
+<rect x=0 y=0 width=100% height=100% fill="#1116" stroke="#2226" stroke-width="1"/>
+<defs>
+<svg id="stone_block" x="0" y="0" width=124 height=124 xmlns="http://www.w3.org/2000/svg" viewBox="10 10 110 110">
+    <defs>
+        <linearGradient id="stone_gradient" gradientTransform="rotate(33)">
+            <stop offset="5%" stop-color="#222"/>
+            <stop offset="35%" stop-color="#111"/>
+            <stop offset="45%" stop-color="#222"/>
+            <stop offset="75%" stop-color="#111"/>
+            <stop offset="85%" stop-color="#222"/>
+            <stop offset="95%" stop-color="#111"/>
+        </linearGradient>
+        <linearGradient id="rev_stone_gradient" gradientTransform="rotate(213)">
+            <stop offset="5%" stop-color="#222"/>
+            <stop offset="35%" stop-color="#111"/>
+            <stop offset="45%" stop-color="#222"/>
+            <stop offset="75%" stop-color="#111"/>
+            <stop offset="85%" stop-color="#222"/>
+            <stop offset="95%" stop-color="#111"/>
+        </linearGradient>
+    </defs>
+    <rect x=0 y=0 width=124 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+    <rect x=-64 y=66 width=124 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+    <rect x=64 y=66 width=124 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+</svg>
+
+<svg id="stone_block_horizontal" x="0" y="0" width=192 height=124 xmlns="http://www.w3.org/2000/svg" viewBox="10 10 160 110">
+    <defs>
+        <linearGradient id="stone_gradient" gradientTransform="rotate(33)">
+            <stop offset="5%" stop-color="#222"/>
+            <stop offset="35%" stop-color="#111"/>
+            <stop offset="45%" stop-color="#222"/>
+            <stop offset="75%" stop-color="#111"/>
+            <stop offset="85%" stop-color="#222"/>
+            <stop offset="95%" stop-color="#111"/>
+        </linearGradient>
+        <linearGradient id="rev_stone_gradient" gradientTransform="rotate(213)">
+            <stop offset="5%" stop-color="#222"/>
+            <stop offset="35%" stop-color="#111"/>
+            <stop offset="45%" stop-color="#222"/>
+            <stop offset="75%" stop-color="#111"/>
+            <stop offset="85%" stop-color="#222"/>
+            <stop offset="95%" stop-color="#111"/>
+        </linearGradient>
+    </defs>
+    <rect x=0 y=0 width=114 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+    <rect x=56 y=66 width=108 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+</svg>
+
+<svg id="stone_block_horizontal_var" x="0" y="0" width=192 height=124 xmlns="http://www.w3.org/2000/svg" viewBox="10 10 160 110">
+    <defs>
+        <linearGradient id="stone_gradient" gradientTransform="rotate(33)">
+            <stop offset="5%" stop-color="#222"/>
+            <stop offset="35%" stop-color="#111"/>
+            <stop offset="45%" stop-color="#222"/>
+            <stop offset="75%" stop-color="#111"/>
+            <stop offset="85%" stop-color="#222"/>
+            <stop offset="95%" stop-color="#111"/>
+        </linearGradient>
+        <linearGradient id="rev_stone_gradient" gradientTransform="rotate(213)">
+            <stop offset="5%" stop-color="#222"/>
+            <stop offset="35%" stop-color="#111"/>
+            <stop offset="45%" stop-color="#222"/>
+            <stop offset="75%" stop-color="#111"/>
+            <stop offset="85%" stop-color="#222"/>
+            <stop offset="95%" stop-color="#111"/>
+        </linearGradient>
+    </defs>
+    <rect x=62 y=0 width=108 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+    <rect x=0 y=66 width=108 height=62 fill="url(#stone_gradient)" stroke="#111" stroke-width="0" >
+    </rect>
+</svg>
+
+<g id="base_walls">
+    <use x=0 y=0   href="#stone_block" />
+    <use x=0 y=128 href="#stone_block" />
+    <use x=0 y=256 href="#stone_block" />
+    <use x=0 y=384 href="#stone_block" />
+    <use x=0 y=512 href="#stone_block" />
+    <use x=0 y=640 href="#stone_block" />
+    <use x=0 y=768 href="#stone_block" />
+    <use x=0 y=896 href="#stone_block" />
+    <use x=0 y=1024 href="#stone_block" />
+    <use x=0 y=1152 href="#stone_block" />
+    <use x=0 y=1280 href="#stone_block" />
+    <use x=0 y=1408 href="#stone_block" />
+    <use x=0 y=1536 href="#stone_block" />
+    <use x=0 y=1664 href="#stone_block" />
+    <use x=0 y=1792 href="#stone_block" />
+    <use x=0 y=1920 href="#stone_block" />
+    <use x=1920 y=0   href="#stone_block" />
+    <use x=1920 y=128 href="#stone_block" />
+    <use x=1920 y=256 href="#stone_block" />
+    <use x=1920 y=384 href="#stone_block" />
+    <use x=1920 y=512 href="#stone_block" />
+    <use x=1920 y=640 href="#stone_block" />
+    <use x=1920 y=768 href="#stone_block" />
+    <use x=1920 y=896 href="#stone_block" />
+    <use x=1920 y=1024 href="#stone_block" />
+    <use x=1920 y=1152 href="#stone_block" />
+    <use x=1920 y=1280 href="#stone_block" />
+    <use x=1920 y=1408 href="#stone_block" />
+    <use x=1920 y=1536 href="#stone_block" />
+    <use x=1920 y=1664 href="#stone_block" />
+    <use x=1920 y=1792 href="#stone_block" />
+    <use x=1920 y=1920 href="#stone_block" />
+
+    <use  x=0  y=0 href="#stone_block_horizontal" />
+    <use  x=128  y=0 href="#stone_block_horizontal" />
+    <use  x=256  y=0 href="#stone_block_horizontal" />
+    <use  x=384  y=0 href="#stone_block_horizontal" />
+    <use  x=512  y=0 href="#stone_block_horizontal" />
+    <use  x=640  y=0 href="#stone_block_horizontal" />
+    <use  x=768  y=0 href="#stone_block_horizontal" />
+    <use  x=896  y=0 href="#stone_block_horizontal" />
+    <use  x=1024 y=0 href="#stone_block_horizontal" />
+    <use  x=1152 y=0 href="#stone_block_horizontal" />
+    <use  x=1280 y=0 href="#stone_block_horizontal" />
+    <use  x=1408 y=0 href="#stone_block_horizontal" />
+    <use  x=1536 y=0 href="#stone_block_horizontal" />
+    <use  x=1664 y=0 href="#stone_block_horizontal" />
+    <use  x=1792 y=0 href="#stone_block_horizontal" />
+
+    <use  x=1792 y=128 href="#stone_block_horizontal" />
+    <use  x=60 y=1855 href="#stone_block_horizontal" />
+
+    <use  x=64 y=128 href="#stone_block_horizontal_var" />
+    <use  x=1792 y=1856 href="#stone_block_horizontal_var" />
+
+    <use  x=0  y=1920 href="#stone_block_horizontal" />
+    <use  x=128  y=1920 href="#stone_block_horizontal" />
+    <use  x=256  y=1920 href="#stone_block_horizontal" />
+    <use  x=384  y=1920 href="#stone_block_horizontal" />
+    <use  x=512  y=1920 href="#stone_block_horizontal" />
+    <use  x=640  y=1920 href="#stone_block_horizontal" />
+    <use  x=768  y=1920 href="#stone_block_horizontal" />
+    <use  x=896  y=1920 href="#stone_block_horizontal" />
+    <use  x=1024 y=1920 href="#stone_block_horizontal" />
+    <use  x=1152 y=1920 href="#stone_block_horizontal" />
+    <use  x=1280 y=1920 href="#stone_block_horizontal" />
+    <use  x=1408 y=1920 href="#stone_block_horizontal" />
+    <use  x=1536 y=1920 href="#stone_block_horizontal" />
+    <use  x=1664 y=1920 href="#stone_block_horizontal" />
+    <use  x=1792 y=1920 href="#stone_block_horizontal" />
+</g>
+</defs>
+
+<use href="#base_walls"/>
+
+
+</svg>
+
+<!--
+<svg id="left_group" xmlns="http://www.w3.org/2000/svg" width="10%" height="10%" margin="max(4px,1vh,1vw)" viewBox="0 0 2048 2048">
+<g id="left_group">
+    <circle cx="1196" cy="1024" r="128" stroke-width="8" fill="#100012" stroke="#000" />
+    <circle cx="1564" cy="1024" r="128" stroke-width="8" fill="#100012" stroke="#000" />
+    <circle cx="1380" cy="840"  r="128" stroke-width="8" fill="#100012" stroke="#000" />
+    <circle cx="1380" cy="1208" r="128" stroke-width="8" fill="#100012" stroke="#000" />
+</g>
+</svg>
+
+
+<svg id="middle_group" xmlns="http://www.w3.org/2000/svg" width="10%" height="10%" margin="max(4px,1vh,1vw)" viewBox="0 0 2048 2048">
+<g id="middle_group">
+    <circle cx="1196" cy="1024" r="128" stroke-width="8" fill="#100012" stroke="#000" />
+    <circle cx="1564" cy="1024" r="128" stroke-width="8" fill="#100012" stroke="#000" />
+    <circle cx="1380" cy="840"  r="128" stroke-width="8" fill="#100012" stroke="#000" />
+    <circle cx="1380" cy="1208" r="128" stroke-width="8" fill="#100012" stroke="#000" />
+</g>
+</svg>
+
+<svg id="right_group" xmlns="http://www.w3.org/2000/svg" width="10%" height="10%" margin="max(4px,1vh,1vw)" viewBox="0 0 2048 2048">
+<g id="right_group">
+    <circle cx="484" cy="1024" r="128" stroke-width="8" fill="#052010" stroke="#000" />
+    <circle cx="852" cy="1024" r="128" stroke-width="8" fill="#052010" stroke="#000" />
+    <circle cx="668" cy="840"  r="128" stroke-width="8" fill="#052010" stroke="#000" />
+    <circle cx="668" cy="1208" r="128" stroke-width="8" fill="#052010" stroke="#000" />
+</g>
+</svg> -->
+
+</body>
+
+<script type="text/javascript">
+</script>
+
+<style type="text/css">
+body, button, div, html {
+    background-color: #111; cursor: crosshair; font-family: monospace; font-size: 64; color: #666;
+}
+
+#main_svg { background-color: #000; cursor: crosshair; font-family: monospace; font-size: 64;border: 0px solid #ccc; display: block; position: absolute; top: 1%; left: 1%; width: 98%; height: 98%; fill: #999; color: #666; }
+
+/*html { background-color: #000; cursor: crosshair; }
+body { margin: 0; width:100% }
+svg {  border: 1px solid #ccc; background: #0000; }
+#left_group { float: left }
+#middle_group {   }
+#right_group { float: right }*/
+</style>
+
+</html>

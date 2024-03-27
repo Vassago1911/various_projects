@@ -1,0 +1,9 @@
+*godot*
+*.ipynb*
+*__pycache__*
+*.out
+*.log
+*.aux
+*.csv
+*elm-stuff*
+*applike_template*

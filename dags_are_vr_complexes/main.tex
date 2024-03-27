@@ -1,0 +1,283 @@
+% This file is part of beamerthemepureminimalistic.
+
+% If problems/bugs are found or enhancements are desired, please contact
+% me over: https://github.com/kai-tub/latex-beamer-pure-minimalistic
+
+\documentclass[a4paper]{book}
+\include{version}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{Remi}[thm]{Reminder}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{nonex}[thm]{{\bf NON}-Example}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{Exercise}[thm]{Exercise}
+\newtheorem{Code}[thm]{Pseudocode}
+\usepackage{datetime2}
+\usepackage{graphicx}
+\usepackage{svg}
+% \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
+\usepackage{svg-extract}
+\usepackage{hyperref}
+\usepackage{inconsolata}
+
+\usepackage{tcolorbox}
+
+\usepackage[all]{xy}
+\usepackage{xypic}
+\usepackage{xcolor}
+
+\definecolor{light}{RGB}{0,100,43}
+\definecolor{dark}{RGB}{130,0,100}
+\definecolor{exercise}{RGB}{220,200,255}
+\definecolor{textcolor}{RGB}{0, 150, 128}
+\definecolor{title}{RGB}{150, 0, 128}
+\definecolor{footercolor}{RGB}{0, 128, 64}
+\definecolor{code}{RGB}{240,220,160}
+\definecolor{codebg}{RGB}{50,50,50}
+\definecolor{mathbg}{RGB}{0,10,30}
+\definecolor{mathtext}{RGB}{220,220,250}
+\definecolor{bg}{RGB}{32, 0, 16}
+
+\def\exercise#1{\color{light}{\h\Exercise{\color{exercise}\scshape #1}}\color{textcolor}}
+\def\code#1#2{\color{dark}{\h\Code{\h}\\[.5em]%
+\color{mathtext}#1
+\begin{tcolorbox}[colback=codebg]%
+\color{code}%
+\texttt{#2}%
+\color{textcolor}%
+\end{tcolorbox}\color{textcolor}}}
+
+\def\backtick{`}
+\def\curtime{\DTMdate{2023-09-21} ~\DTMtime{01:42:17}\DTMdisplayzone{-5}{00}}
+\def\light#1{{\color{light}#1}}
+\def\dark#1{{\color{dark}#1}}
+\def\h{\hspace{1em}}
+
+\def\signature{\href{mailto:marc@lange-data.org}{Dr. Marc Lange, marc@lange-data.org}}
+\def\mailsignature{\href{mailto:marc@lange-data.org}{marc@lange-data.org}}
+
+\def\abs#1{\left| #1 \right| }
+\def\floor#1{\lfloor #1 \rfloor }
+
+\newcommand{\lthree}{<\hspace{-5.2pt}3}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\DAG}{\mathcal{DAG}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\C}{\mathcal{C} }
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\LL}{\mathcal{L}^1(\Z,\Z)}
+\newcommand{\Set}{\mathrm{Set}}
+
+\renewcommand{\dag}{\mathrm{emb}\mathcal{DAG}}
+
+
+\newcommand{\s}{Set^{\phantom{\leq}}_{\phantom{+}}}
+\newcommand{\spp}{Set=fSet}
+\newcommand{\smp}{Set^{\leq}_{\phantom{+}}}
+\newcommand{\spm}{Set^{\phantom{\leq}}_{+}}
+\newcommand{\smm}{Set^{\leq}_{+}}
+\newcommand{\spmpm}{Set^{\pm}_{\pm}}
+
+\newcommand{\App}{A}
+\newcommand{\Amp}{A^{\leq}_{\phantom{+}}}
+\newcommand{\Apm}{A^{\phantom{\leq}}_{+}}
+\newcommand{\Amm}{A^{\leq}_{+}}
+
+\begin{document}
+\chapter{VR complexes, Flags and DAGs}
+\section{basics}
+\defn{DAG - vertices $=\lbrack n\rbrack$}
+\defn{VR - $VR_\varepsilon(X)$ wrt max norm}
+\prop{$VR = Flag(sk_1(VR(X)))$}
+\section{Each dag is a VR complex}
+\defn{
+    A VR embedding of a directed acyclic graph $G=(VG,EG)$ is a
+    collection of points $X=\{x_1,\ldots,x_{|G|}\}$ and a fixed
+    $\varepsilon > 0$, with a map $\iota_G\colon VG \rightarrow \R^2$ with image $X$,
+    such that the Vietoris-Rips-Complex recovers the graph:
+    \[ VR_\varepsilon(X)=\{~ (x_i,x_j) \in X^2 ~|~i\leq j, d(x_i,x_j)<\varepsilon ~\}  \]
+    \[ \cong (VG,EG). \]
+}
+
+\lem{
+    For a disconnected graph $G=H_1\sqcup H_2$ which has a VR embedding
+    for each summand $H_i$, the sum $G$ has a VR embedding as well.
+    \begin{proof}
+    Given two such embeddings by the assumptions one only has to make sure
+    no edges are introduced between $H_1$ and $H_2$. To do so consider their
+    isomorphisms $VR_{\varepsilon_1}(i_1H_1)\cong H_1$ and $VR_{\varepsilon_2}(i_2H_2)\cong H_2$.
+    One convinces oneself easily that by scaling just one of the embeddings, it
+    can be arranged that $\varepsilon := \varepsilon_1 = \varepsilon_2$ without
+    loss of generality. By embedding both (compact, hence bounded) images in $\R^2$
+    at more distance than $\varepsilon$, a VR complex with the same or smaller $\bar\varepsilon$
+    recovers the disjoint sum $G = VR_\varepsilon(i_1H_1\sqcup i_2H2)$ for $\sqcup$ just
+    a suggestive notation for the embedding of the summands at "great distance".
+    \end{proof}
+}
+
+\lem{
+    Every fully connected graph has a VR embedding.
+    \begin{proof}
+    Count the vertices $G = \{1,\ldots,n\}$ with $n\geq 0$ and embed them as
+    $X=\{(i,0)|1\leq i \leq n\}$. Then $VR_{n+\varepsilon}(X) \cong G$ for any
+    $\varepsilon >0$.
+    \end{proof}
+}
+
+\lem{
+    Consider a subgraph in a graph $M\subset G$ defined by a restricted vertex set $VM$
+    and all induced edges of $G$. Additionally for each partition of
+    $VG = V_1 \sqcup VM \sqcup V_2$, consider the induced
+    subgraphs $G_1 = G\lbrack V_1 \sqcup VM\rbrack$ and $G_2 = G\lbrack V_2 \sqcup VM\rbrack$.
+
+    If $G_1$ and $G_2$ each already see all of $G$'s edges, i.e. if $EG_1\cup EG_2 = EG$: Then $G$ is the categorical pushout of $G_1$ and $G_2$ over $M$.
+    \begin{proof}
+    Given a map $G\rightarrow Z$ for any graph $Z$ there clearly are uniquely induced maps
+    restricted to $G_1$ and $G_2$, which are compatible over $M$.
+
+    Given a pair of maps $\varphi_i\colon G_i \rightarrow Z$ that agree on $M$, show that there
+    is a unique map $\varphi\colon G\rightarrow Z$ inducing the $\varphi_i$.
+
+    By assumption on the vertex sets $\varphi$ is clearly uniquely determined, so one has
+    to show that the map induced by the map on vertex sets is in fact a dag map.
+    This is true if and only if there are not any edges connecting $V_1$ and $V_2$, otherwise
+    one can universally construct an example of a dag map on both subsets, agreeing on the
+    intersection, that breaks that edge. By assumption on the edge-sets, this cannot happen,
+    any edge in $G$ is either part of $G_1$ or $G_2$ or both, hence of $M$. So all edges
+    of $G\rightarrow Z$ in fact are edges in $Z$ as well, hence get the unique induced
+    map of the pushout.
+    \end{proof}
+}
+
+\lem{
+    Let $G = VR_1(X)$ for some finite point set $X\subset \R^2$, then $X$ can be perturbed
+    in such a way that $EG = \{~(v,w)\in X\times X~|~v=w \vee
+    ( \varepsilon_l<d(v,w)<\varepsilon_r \wedge d(v,w) = |v_x-w_x| )~\}$.
+    In words: The edge set are the pairs of nodes which are close enough, and all of them
+    have their maximal distance to each other in the $x$-component.
+    \begin{proof}
+    If $G$ is arranged so that all distances are instead realised by $y$-components, just
+    transpose $\tau\colon \R^2 \rightarrow \R^2$. The resulting image satisfies the $x$-component
+    condition then. If $G$ is arranged already satisfying the conditions, there is nothing
+    to prove. Hence consider the set of all vertices such that all their distances to other
+    vertices are realised in each case by the $x$-component, the sets of all vertices which
+    realise each case by their $y$-component, and the set of vertices which are in neither other
+    set, i.e. which have one vertex which realises their distance with $x$ and another with $y$.
+
+    If the $x$-component set is larger than one vertex, .. ?
+    If the $y$-component set is larger than one vertex, .. ?
+
+    \end{proof}
+}
+
+\cor{ % <=> ein VR complex acc to max norm kann so gebaut sein, dass das max immer von
+      %     derselben koordinate realisiert wird
+    A VR embedding of a graph can always be modified to have its vertices embedded
+    in strictly $y$-coordinate-increasing order.
+    \begin{proof}
+    This is clear for the empty graph, the one-point graph, any graph on two points.
+    So assume the graph has at least $3$ nodes which are already without loss of
+    generality enumerated points in $\R^2$: $VG = X = \{~(x_i,y_i)\in \R^2~ |~1\leq i\leq n~\}$
+    with edgelist $EG = \{~ (v,w) \in X\times X~|~ d(v,w)<2 ~\}$. I.e. the vertex
+    set is a set of points in the 2d plane with an edge between two points if and
+    only if their distance is less than 2.
+
+    Choose the distance $d(v,w)=\lVert v - w \rVert_\infty$, which is also no loss
+    of generality since $\R^2$ is a finite-dimensional vector space. This results in
+    the edge list becoming:
+    \[ EG = \{~((v_x,v_y),(w_x,w_y))~|~0\leq |v_x - w_x| < 2 \wedge 0 \leq |v_y-w_y| < 2~\}. \]
+    Since the graph is finite there is also a non-zero minimum distance of the nodes
+    \[ \forall v,w \in X\colon v\neq w \Rightarrow d(v,w)>\varepsilon. \]
+    By rescaling again assume without loss of generality the edge list is:
+    \[
+    \begin{aligned}
+    EG = & \{~((v_x,v_y),(w_x,w_y))~|~\\
+    & 0 \leq |v_x - w_x| < K \\
+    &\wedge 0 \leq |v_y-w_y| < K \\
+    & \wedge 1 < min(|v_x-w_x|,|v_y-w_y|) ~\}\cup \{(v,v)|v\in X\}
+    \end{aligned}
+    \]
+    for some natural number $K\in \N$.
+    % TODO: conditions auf  1< bla < 2 homogenisieren, pr_0 und pr_1 injektiv machen
+
+    % ODER: jump right in?
+    If the index maximal node in $X$ is already the highest $y$-coordinate in the embedding,
+    inductively rearrange the nodes below it, and the claim follows.
+
+    Hence assume the maximal node is not $y$-maximally embedded, and fix that.
+    Cover $G$ as $G\setminus y \cup \bar y$ for $\bar y$ the graph on vertices $X$
+    with edges
+    \[ E \bar y = \{~(a,b)\in X~|~b=y\wedge a\neq y \wedge
+    0\leq \lVert a-y\rVert < K \wedge 1 < min(|a_x-y_x|,|a_y-y_y|) < K ~\}. \]
+
+    \end{proof}
+}
+
+\cor{
+    A VR embedding of a graph can be modified to have the vertices embedded in any
+    arbitrary order.
+    \begin{proof}
+    Relabel the graph according to the vertex permutation and direct it according
+    to the new labels. By the result above it can be embedded in increasing order,
+    but the permutation is arbitrary, hence follows the result.
+    \end{proof}
+}
+
+\rem{
+    The crucial point to inductively construct VR embeddings for all graphs is
+    the following lemma.
+}
+
+\lem{
+    Given a VR embedding of a graph $G\rightarrow \R^2$, and a binary partition
+    of the vertices $VG = V_1 \sqcup V_2$, the embedding can be perturbed so that
+    the vertices satisfy:
+    \[ \forall v \in V_1 \forall w \in V_2\colon d(v,w)>\varepsilon, \]
+    for some $\varepsilon > 0$.
+    \begin{proof}
+    Assume without loss of generality the graph is a VR complex with radius $1$:
+    $VR_1(X)$ with 
+    \end{proof}
+}
+
+\thm{Each dag $G$ with finitely many vertices is a $sk_1(VR(X))$.
+\begin{proof}
+I.e. it is to show that for each finite dag $G$ there is a $2d$ point
+configuration of finitely many points with $sk_1(VR(X)) = G$. If that
+is to be true, assume wlog $VG = X$. By compactness assume wlog
+$X = \{~(x_i,y_i)\in \lbrack 0,n\rbrack \times \lbrack 0,1\rbrack~|~1\leq i\leq |X|=n,~\}$
+such that $min_i(x_i) = x_0 = 0$ and $max_i(x_i) = x_n = n$.
+
+For $G=(X,EG)$ with $|X|\leq 3$ it is easy to see all dags are VR complexes:
+The empty graph comes from the empty set, the one-point graph from any one-point
+set, the disconnected graph on two points can be realised with $X$ satisfying the above with $\varepsilon < \frac12$ and the connected graph on two points can be realised with $\varepsilon > \frac12$.
+For $|X|=3$ the maximally connected case is a triangle, so arrange $X = \{(0,0),(0.5,0),(1,0)\}$, then
+for $\varepsilon > 1$ the complex $VR_\varepsilon(X)$ is fully connected on two vertices. If there is any
+edge not connected in the original graph on $3$ vertices, one can see how to push two $\R^2$ points apart
+so that they stay connected to a third point, but not to each other. If there is another edge missing,
+push the third point closer to one extremal point, so it leaves the range of the other point. If there
+are not any edges in the original graph..
+
+% <- grauenhaftes stueck I0, das muss doch erhellender gehen
+
+Continue by induction, consider the $x\in X$ with the maximal $pr_0(x)$-value, call it $x=(x_0,x_1)$.
+
+\end{proof}}
+
+\end{document}

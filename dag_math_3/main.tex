@@ -1,0 +1,1127 @@
+% This file is part of beamerthemepureminimalistic.
+
+% If problems/bugs are found or enhancements are desired, please contact
+% me over: https://github.com/kai-tub/latex-beamer-pure-minimalistic
+
+\documentclass[a4paper]{book}
+\include{version}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{Remi}[thm]{Reminder}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{nonex}[thm]{{\bf NON}-Example}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{Exercise}[thm]{Exercise}
+\newtheorem{Code}[thm]{Pseudocode}
+\usepackage{datetime2}
+\usepackage{graphicx}
+\usepackage{svg}
+% \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
+\usepackage{svg-extract}
+\usepackage{hyperref}
+\usepackage{inconsolata}
+
+\usepackage{tcolorbox}
+
+\usepackage[all]{xy}
+\usepackage{xypic}
+\usepackage{xcolor}
+
+\definecolor{light}{RGB}{0,100,43}
+\definecolor{dark}{RGB}{130,0,100}
+\definecolor{exercise}{RGB}{220,200,255}
+\definecolor{textcolor}{RGB}{0, 150, 128}
+\definecolor{title}{RGB}{150, 0, 128}
+\definecolor{footercolor}{RGB}{0, 128, 64}
+\definecolor{code}{RGB}{240,220,160}
+\definecolor{codebg}{RGB}{50,50,50}
+\definecolor{mathbg}{RGB}{0,10,30}
+\definecolor{mathtext}{RGB}{220,220,250}
+\definecolor{bg}{RGB}{32, 0, 16}
+
+\def\exercise#1{\color{light}{\h\Exercise{\color{exercise}\scshape #1}}\color{textcolor}}
+\def\code#1#2{\color{dark}{\h\Code{\h}\\[.5em]%
+\color{mathtext}#1
+\begin{tcolorbox}[colback=codebg]%
+\color{code}%
+\texttt{#2}%
+\color{textcolor}%
+\end{tcolorbox}\color{textcolor}}}
+
+\def\backtick{`}
+\def\curtime{\DTMdate{2023-09-21} ~\DTMtime{01:42:17}\DTMdisplayzone{-5}{00}}
+\def\light#1{{\color{light}#1}}
+\def\dark#1{{\color{dark}#1}}
+\def\h{\hspace{1em}}
+
+\def\signature{\href{mailto:marc@lange-data.org}{Dr. Marc Lange, marc@lange-data.org}}
+\def\mailsignature{\href{mailto:marc@lange-data.org}{marc@lange-data.org}}
+
+\def\abs#1{\left| #1 \right| }
+\def\floor#1{\lfloor #1 \rfloor }
+
+\newcommand{\lthree}{<\hspace{-5.2pt}3}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\DAG}{\mathcal{DAG}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\C}{\mathcal{C} }
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\LL}{\mathcal{L}^1(\Z,\Z)}
+\newcommand{\Set}{\mathrm{Set}}
+
+\renewcommand{\dag}{\mathrm{emb}\mathcal{DAG}}
+
+
+\newcommand{\s}{Set^{\phantom{\leq}}_{\phantom{+}}}
+\newcommand{\spp}{Set=fSet}
+\newcommand{\smp}{Set^{\leq}_{\phantom{+}}}
+\newcommand{\spm}{Set^{\phantom{\leq}}_{+}}
+\newcommand{\smm}{Set^{\leq}_{+}}
+\newcommand{\spmpm}{Set^{\pm}_{\pm}}
+
+\newcommand{\App}{A}
+\newcommand{\Amp}{A^{\leq}_{\phantom{+}}}
+\newcommand{\Apm}{A^{\phantom{\leq}}_{+}}
+\newcommand{\Amm}{A^{\leq}_{+}}
+
+\begin{document}
+\chapter{2024-03-20 -- Sets, Relations, Transitivity, Partial and Total Orders}
+\section{The fundamental set categories}
+This paper makes liberal use of the language of ($1$-)categories, specifically adjunctions are
+numerous in these results. The unfamiliar reader is encouraged to look up their favourite adjunction
+anywhere, I can guarantee you have one, if you do not know it. Following along the adjunctions here
+inspired by any other adjunction, for example of the free-forgetful-type, helps clarify the roles of
+source- and target-categories in each adjunction here. For a more rigorous reference Saunders MacLane's
+"Categories for the Working Mathematician" will do nicely, there is no ultra-modern category tech here.
+However, for definiteness fix what categories are in this paper:
+\defn{
+    Consider a tuple $\mathcal{C}=(\C_0,\C_1,s,t,id,\circ)$ consisting of two sets $\C_0,\C_1$ in the sense recalled in the next definition
+    and four set-maps $id\colon \C_0 \rightarrow \C_1, s,t\colon \C_1\rightarrow \C_0, \circ \C_1\times_{t,s}\C_1\rightarrow \C_1,$
+    where $\C_1\times_{t,s}\C_1 := \{~(c,d)\in\C_1\times\C_1 ~|~t(c)=s(d)~\}$.
+
+    Call the above structure a $1$-category, if the following compatibility conditions are satisfied:
+    \[ \circ(\circ(f,g),h) = \circ(f,\circ(g,h)), \circ(1_\bullet,f)=f, \circ(f,1_\bullet)=f.  \]
+
+    No person would write composition like that though, so introduce the notation $d\circ c := \circ(c,d)$.
+    Then the axioms become the more familiar:
+    \[ (f\circ g)\circ h = f\circ(g\circ h), 1_\bullet\circ f = f, f\circ 1_\bullet=f. \]
+}
+
+\rem{
+    Note that in particular from the perspective of this paper all categories are small, as in, the set of
+    all objects and all morphisms is actually a set. Obviously the category of all sets or all relations do not
+    satisfy having sets of objects like above, but still satisfy the relations. The distinction between small
+    and large categories in this paper is however an easily noticeable contrast even without emphasis.
+}
+
+\rem{
+    In light of the associativity of $\circ$ one could make an argument to denote $n$-fold composites as $\circ(f_n,\ldots,f_1)$ though.
+}
+
+
+
+Since a lot of the following arguments rely on very specific descriptions of the involved sets, it
+seems wise to recall a few of the set-theoretic notions here, also to fix notation. They are however classical,
+and strictly speaking a lot of the results of this paper can be recovered in far smaller models of set.
+It, however, seems opportune to state in proper generality for all sets all that can be done for such
+general sets.
+\defn{
+    A set for the purposes of this paper is a collection of elements $S = \{s|s\in S\}$ which uniquely
+    identify the set, i.e. given another set $T = \{t|t\in S\}$, both are equal if and only if they have
+    the same elements:
+    \[ S=T \Leftrightarrow \forall s \in S \colon s\in T \wedge \forall t \in T \colon t \in S. \]
+    A map of sets $f\colon S\rightarrow T$ is informally a "formula" that for each element of
+    $S$ unambiguously assigns an element of $T$. For example the set of all maps between $S,T$ sets can
+    be realised as a set explicitly as follows:
+    \[ Set(S,T):=\{~f\subset S\times T~|~\forall s\in S \exists! t\in T\colon (s,t)\in f~\} .\]
+    Maps are the binary relations between the sets $S$ and $T$ such that each source element has a
+    unique target element, not necessarily different for different $s\in S$. For $f$ an element
+    of $Set(S,T)$ hence write the guaranteed unique element of $T$ that is in $f$-relation to it as its
+    $f$-image, i.e. $f(s)=t :\Leftrightarrow (s,t)\in f$.
+    Maps are hence equal if and only if they are equal as sets if and only if
+    they agree on each source element. Maps can be composed in the familiar way, identities are
+    realised as the diagonal for each set. The fact that maps compose associatively is a well-known fact
+    of set theory just quoted here.
+
+    Call the category of sets thus "defined" $Set$.
+}
+\rem{
+    Note that implicitly one has to fix an inaccesible cardinal here, and limit the cardinality of the included sets below that cardinal. Then one
+    can accurately identify $Set$ as a hierarchy of $1$-categories of ever increasing largeness, where the definition of what is allowed to
+    be considered a set extends constantly.
+
+    For many applications that is an exceptionally important point, for these applications it is not, hence suppress such considerations wherever
+    convenient here.
+}
+\rem{The axiomatically minded reader is encouraged to take this definition as, assume the ZFC axioms,
+     and a model of category theory of "small" categories in it, i.e. categories that have object- and morphism-sets
+     constructed by these ZFC axioms of our universe. All categories of interest in this paper are small (hence also locally small).}
+\rem{Note that classically in set one can construct arbitrary unions, arbitrary disjoint unions, arbitrary products (by axiom of choice),
+     subobjects, quotients, colimits, limits. Sets are a very convenient category in which to construct base objects, but usually not
+     structured enough.}
+
+\defn{
+    A binary relation $R$ on two sets $S,T$ is a subset of their product
+    $R\subset S\times T$, denote $s\in S, t\in T$ to be in
+    $R$ relation as $sRt:\Leftrightarrow (s,t)\in R$.
+
+    A map of relations $f\colon R_0\rightarrow R_1$ is a pair of maps $f_S\colon S_0 \rightarrow S_1$ and $f_T\colon T_0\rightarrow T_1$ for
+    $R_i\subset S_i\times T_i$, such that restricting $f$ to elements of $R_0$ only yields elements of $R_1$, say the morphism respects
+    the relation: \[ f~ \mathrm{relation ~morphism}~:\Leftrightarrow~\forall (s,t) \in R_0\colon (f_S(s),f_T(t))\in R_1. \]
+}
+\rem{Since composition of heteregoneous relations restricts to composition of set maps, recall the definition for clarity.}
+\defn{
+    Given two binary relations $ R_0\subset S\times T, R_1\subset T\times U$ with compatible middle set $T$, define the
+    composite relation $R_1\circ R_0 \subset S\times U$ as follows:
+    \[ (s,u) \in R_1\circ R_0 :\Leftrightarrow \exists t \in T\colon sR_0t \wedge tR_1u. \]
+
+    I.e. the composite relation contains all such pairs such that in the middle step there exists a common relating element
+    in the "forgotten set" $T$.
+}
+
+\rem{The only such general relations that feature in this content are the set maps defined as above. Note that composition of relation is just as
+     associative as composition of set maps.
+
+     It is convenient for this paper to restrict to a more restrictive class of relations.}
+
+\defn{
+    A homogeneous binary relation $R$ on a set $S$ is a subset of the product of $S$ with itself $R\subset S\times S$.
+    Call $S$ the underlying set of $R$.
+
+    A map of homogenous binary relations $f\colon R_0\rightarrow R_1$ is a map of the underlying sets $f\colon S\rightarrow T$ that
+    respects the relation, i.e. $\forall s,t \in S: sR_0t \Rightarrow f(s)R_1f(t)$. Maps contain identities, they compose, and associatively, because
+    that is true on $Set$.
+
+    Call the category of homogeneous binary relations thus defined $Rel$.
+
+    Note in addition that composition of relations restricts to homogeneous relations.
+}
+
+\rem{
+    Do note that in particular each map of underlying sets induces a map of the empty relations.
+}
+
+\prop{
+    Consider for each non-empty set the empty relation as follows $R=(\emptyset\subset S\times S)$, then for any other
+    non empty relation there are not any maps into $R$. For any other relation, empty or not the set of maps from the
+    empty relation to it is the same as a map of the underlying sets. In particular the relation $\emptyset$ on the
+    underlying set $\emptyset$ is an initial object of the category of relations.
+    \begin{proof}
+    If the relation is non-empty, there is no way to define a map from it into an empty set, in particular the
+    underlying set map cannot induce a compatible map on relations. Hence follows the first claim.
+
+    By definition of relation-maps such a map is a map of underlying sets, respecting relations. Since there are not any
+    relations to respect in the empty relation, such a map is always trivially a relation-map, so all set maps
+    induce a relation-map.
+    \end{proof}
+}
+
+\prop{
+    The one-point set with relation equality $(\{*\},\{(*,*)\})$ is a terminal object in $Rel$.
+    \begin{proof}
+    As a corollary to the above proposition, the largest a set of relation morphisms can get, is, if the source relation
+    is empty. In that case the map and the fact that it is a map of relations is equivalent to the underlying set map.
+    For that case there exists only one underlying set map to any one-point set. Hence, since the terminal object displayed
+    above has all relations between its elements, any set map to the one-point set defines a unique relation-map. Hence
+    the resulting relation-map is unique.
+    \end{proof}
+}
+
+\defn{
+    Every set $S$ has two trivially associated homogeneous relations, the discrete one and the collapsible one. Fix
+    notations in accordance with the upcoming topological interpretations:
+    \[ S^\delta = \{~(s,s)~|~s\in S~\} ~~~ \Delta^S = \{~(s,t)~|~s,t\in S~\}. \]
+    In addition note that every relation on $S$ has a unique morphism from $S^\delta$, which is the identity on $S$, and a unique
+    morphism to $\Delta^S$, which is the identity on $S$.
+}
+
+\defn{
+    Call a relation with any underlying set an empty relation if it has no elements.
+    Call a relation discrete if it can be realised as $S^\delta$ by its underlying set. % == reflexive closure of empty relation!
+    Call a relation collapsible if it can be reliased as $\Delta^S$ by its underlying set.
+}
+
+\rem{
+    Note that interpreted in the context of sets and set maps the discrete relation is exactly the identity map of its underlying set.
+    Collapsible relations are never maps for sets with at least two elements, but the empty set and one point set each induce the
+    identity on themselves this way too.
+}
+
+\lem{
+    Morphisms into collapsible relations are the same as the set maps of underlying sets, i.e. for $U$ the forgetful
+    functor as above, there is an adjunction:
+    \[ U\colon Rel \leftrightarrow Set \colon \Delta^\bullet. \]
+    With $U$ the forgetful functor $Rel\rightarrow Set$, synonymously with "underlying set functor", as above.
+    \begin{proof}
+    The claim is $Rel(R\subset S\times S,\Delta^T)=Set(UR=S,T)$. Since $\Delta^T$ contains every possible pair, being a
+    map of relations into it is an empty condition, so forgetting down to underlying sets retains all information and the
+    argument works %todo!
+    \end{proof}
+}
+
+\cor{
+    Since colimits are defined as left adjoints follows by the standard $1$-category argument, colimits of relations
+    are created by forgetting down to sets. I.e. take the colimit of the relations and their underlying sets componentwise in $Set$,
+    that is a valid colimit in $Rel$.
+}
+
+\lem{
+    There is an isomorphism of categories: Sets and set maps are the same thing as the full subcategory of binary homogeneous discrete relations.
+    \begin{proof}
+    Any set can be represented as its associated discrete relation, any map of sets trivially induces a map of discrete relations, because the
+    condition of being a relation map is vacuously satisfied. Hence forgetting down the discrete relation recovers the same sets and maps.
+
+    Coming from a discrete relation, forgetting down to the underlying set forgets nothing about the maps, because they do not have to satisfy non-trivial
+    relation-compatibility conditions on discrete relations. Hence they are uniquely described on their underlying sets and each such map induces
+    a map of relations by passing to the discrete relations again, recovering the relations and their maps.
+    \end{proof}
+}
+
+\rem{
+    It might seem brutal notation to denote by $Rel$ such a stricter category of relations than the more general definition above.
+    However, apart from maps the relations in this paper that structure the content are all homogeneous, so they deserve emphasis.
+}
+
+%\section{Endofunctors of $Rel$, Transitivity, Partial Orders, Total Orders}
+\section{Reflexive Relations are complete and cocomplete}
+The category of (homogeneous binary) relations $Rel$ a few interesting endofunctors, consider the first one of this paper.
+\defn{
+    For each relation $R\subset S\times S$ consider its reflexive closure:
+    \[ refl\colon Rel\rightarrow Rel \]
+    with $refl(R):=\{~(s,s)~|~s\in S~\} \cup R$. Its naturally compatible
+    with maps of (homogeneous) relations, hence a functor.
+
+    Call a relation $R$ reflexive if it satisfies $relf(R)=R$, which is exactly the case if all diagonal elements
+    of the underlying set were already part of $R$.
+
+    Call the full subcategory of reflexive relations $RRel$, i.e. $RRel$ has objects relations that are $refl$-fixed points
+    and all relation morphisms between them.
+}
+
+\rem{
+    One can equivalently, since the subcategory is full, consider the reflexive closure the left-adjoint to
+    the forgetful functor from reflexive relations to relations:
+    \[ refl\colon Rel \leftrightarrow RRel \colon U. \]
+    That point does not clarify things substantially here, but might be helpful in other contexts.
+}
+
+\lem{
+    Morphisms out of a discrete relation into any reflexive relation are the same as the set maps of the underlying sets. I.e.
+    send each reflexive relation $RRel\ni R\subset S\times S$ to its underlying set $UR = S\in Set$, and similarly on maps, then
+    there is an adjunction:
+    \[ (\bullet)^\delta\colon Set \leftrightarrow RRel \colon U. \]
+    Call $U$ the forgetful functor $RRel\rightarrow Set$, synonymously with "underlying set functor".
+    \begin{proof}
+    Staring at $RRel(M^\delta,R\subset S\times S) = Set(M,S)$ long enough will convince the reader this is true.
+    Explicitly: A map of homogeneous relations from a discrete relation only is a map of equal pairs $(m,m)$, hence
+    these are equal in $S$ too, so forget down to the underlying set map. Since a morphism of relations is defined
+    via the underlying set map with properties, which are vacuously satisfied for a discrete source object follows
+    the above equality. Note however that only reflexive $R$'s admit such maps in this way, thus the restriction to that
+    subcategory.
+    \end{proof}
+}
+
+\cor{
+    The adjunction as above restricts to the subcategory of reflexive relations.
+    \[ U\colon RRel \leftrightarrow Set \colon \Delta^\bullet. \]
+    \begin{proof}
+    The claim is $Set(UR,S) = RRel(R,\Delta^S)$, i.e. for a reflexive relation $R$ the relation morphisms to a collapsible relation
+    with underlying set $S$ are exactly the same as set morphisms from $R$'s underlying set. Since $RRel$ is a full subcategory
+    of $Rel$ this follows from the analogous lemma on $Rel$, since $\Delta^S$ is a reflexive relation for every set $S$, hence also
+    contained in $RRel$.
+    \end{proof}
+}
+
+\rem{Note interestingly that making a relation irreflexive is not a functor without assuming a smaller class of maps. If $f\colon R_0 \rightarrow R_1$
+being a map of relations depended on a relation $xR_0y$ with $x\neq y$ and $fx=fy$ with $fxR_1fy$, then making $R_1$ irreflexive breaks the
+property of $f$ being a morphism of relations. So any non-injective map of homogeneous relations does not induce a map on the associated irreflexive relations.}
+
+\rem{
+    The adjunctions establish an interesting conflict of intuitions. There should clearly be more relations than there are plain sets,
+    which is expressed by the fact that $\Delta^S$ allow for any kind of map into them, so recover all set maps of the underlying sets of all relations,
+    but there are clearly more relations that are not $\Delta^S$ for any non-empty set $S$.
+
+    On the other hand the other adjunction involving the discrete relations $(\bullet)^\delta$ is a formalisation of the fact that
+    a map of relations is uniquely determined by what it does on the underlying sets, everything else are conditions. Hence because
+    every relation admits a map from the discrete relation on its vertex set with underlying set map the identity, see in particular
+    that a map of relations is uniquely determined on the underlying set, and it follows from the adjunction.
+}
+
+\cor{
+    By identifying sets with the category of discrete relations the above adjunctions can actually be interpreted as adjunctions to an
+    inclusion $i\colon Set \hookrightarrow RRel$.
+    \begin{proof} This is basically a matter of notational preference, but important enough to emphasise. \end{proof}
+}
+
+Finally note the result for which the adjunctions were set up:
+\thm{
+    The category of reflexive relations is complete and cocomplete, with colimits and limits computed componentwise for
+    objects as well as morphisms.
+    \begin{proof}
+    The plain existence of left- and right-adjoints to the forgetful functor to sets guarantees the above fact.
+
+    Consider for simplicity and explicity inductive limits and colimits:
+    Given a system $(R_0\rightarrow R_1\rightarrow \ldots\rightarrow R_n\rightarrow R_{n+1}\rightarrow \ldots)$ of arbitrary maps
+    of reflexive relations and their underlying sets, define the colimit underlying set as the colimit of the underlying sets, then the
+    induced relation is defined exactly by being related in a finite step. This satisfies the universal property of the colimit
+    in reflexive relations, hence is a reflexive relation representing that colimit.
+
+    Similarly given a system $(\ldots \rightarrow R_{n+1}\rightarrow R_n\rightarrow \ldots \rightarrow R_1\rightarrow R_0)$ of arbitrary
+    maps of reflexive relations and underlying sets, define the limit underlying set as the limit of underlying sets. Elements are in relation if they
+    are so in each $R_i$ step. On underlying sets the universal property is inherited from sets, and the extended relation is uniquely forced
+    by that structure.
+
+    Arbitrary diagrams follow similarly in both cases, simply replace "in a finite step" with "in some representing summand for the quotient" in the colimit,
+    the limit-case works verbatim. The limit and colimit relations are each well-defined because the system-maps are maps of relations.
+    \end{proof}
+}
+
+Each of the following corollaries follows directly from the theorem, but it is worth explicitly constructing some special cases of limits and colimits,
+which are of further use here.
+
+\cor{
+    Reflexive Relations have pushouts.
+    \begin{proof}
+    Given three reflexive relations $(R_0\subset S_0\times S_0,R_1\subset S_1\times S_1,R_2\subset S_2\times S_2)$, with set maps $i_1\colon S_0\rightarrow S_1$ and
+    $i_2\colon S_0 \rightarrow S_2$ each inducing relation maps on the $R_i$. Then consider the pushout of underlying sets $S_1\cup_{S_0}S_2$ with
+    set maps $j_1\colon S_1\rightarrow S_1\cup_{S_0}S_2$, $j_2\colon S_2\rightarrow S_1\cup_{S_0}S_2$.
+
+    By construction of colimits in set an element $s\in S_1\cup_{S_0}S_2$ can be represented by either elements of $S_1$ or $S_2$, with identifications over $S_0$.
+    Hence set the quotient relation to be $\lbrack x \rbrack R \lbrack y \rbrack :\Leftrightarrow (x,y\in S_1, xR_1y) \vee (x,y\in S_2,xR_2y)$. It is clearly a relation,
+    since it has pairs in the same underlying set, and it is reflexive, because all relations involved are.
+
+    It satisfies the universal property of the pushout, since it has the minimal set of relation pairs given the diagram, and the morphism from the common source $R_0$ ensures
+    that each compatible pair of maps factors over the quotient.
+    \end{proof}
+}
+
+\rem{
+    Be aware that pushouts of relations are a relatively brutal construction, consider the following few examples.
+
+    Let the relations $R_0,R_1,R_2$ be as follows: All are defined on the underlying set of two elements, denote it
+    $S = \{0,1\}$, the maps are the ones induced by the identity of $S$.
+
+    Let $R_0 = S^\delta$, and set $R_1 = S^\delta \cup \{(0,1)\}$ and $R_2 = S^\delta \cup \{(1,0)\}$.
+    Then the pushout relation is defined on the same set $S$, contains the diagonal trivially, but also every
+    possible pair, because $(0,1)$ and $(1,0)$ are introduced each from their summands. So pushing out the two
+    relations that could be called $\leq$ and $\geq$ respectively, get the trivial collapsible relation on the underlying sets.
+    This example generalises to arbitrary sets with at least two points.
+
+    Consider also explicitly quotients, that is any map of relations $R_0\rightarrow R_1$ on arbitrary underlying sets $S_0\rightarrow S_1$,
+    and consider the unique map $R_0 \rightarrow pt$ to the terminal relation, the one-point-relation on the one-point set.
+
+    Then the resulting pushout has underlying set $S_1 / im S_0$, and the relation recovers exactly the relations on
+    $S_1 \setminus im S_0$ while the whole underlying set $S_0$ has been collapsed to a point in the quotient, which satisfies reflexivity.
+}
+
+\cor{
+    Reflexive relations have coequalisers.
+    \begin{proof}
+    Let $f,g\colon R_0 \rightarrow R_1$ be two morphisms of reflexive relations with underlying sets $S_0,S_1$ respectively.
+    Consider the underlying quotient set $S = S_1/\sim$ with equivalence relation generated by $fx\sim gx \forall x \in S_0$.
+    Induce a relation $R/\sim$ by the relation of $S_1$, i.e. $\lbrack x\rbrack R/\sim \lbrack y\rbrack :\Leftrightarrow
+    \exists a,b\in S_1: a\in\lbrack x\rbrack, b\in \lbrack y\rbrack, aR_1b$. Since $R_1$ is reflexive, so is $R/\sim$. The universal property
+    is readily verified.
+    \end{proof}
+}
+
+\cor{
+    Reflexive relations have pullbacks.
+    \begin{proof}
+    Let $f\colon R_1\rightarrow R_0$ and $g\colon R_2\rightarrow R_0$ be two morphisms of relations with a common target and underlying sets $S_i$ as before.
+    Consider the pullback set $S = S_1\times_{S_0}S_2=\{~(s,t)\in S_1\times S_2~|~fs=gt~\}$ and induce a relation $R$ on $S$ componentwise:
+    $(s,t)R(u,v) :\Leftrightarrow sR_1u \wedge tR_2v$. The universal property is easy to prove.
+    \end{proof}
+}
+
+\cor{
+    Reflexive relations have equalisers.
+    \begin{proof}
+    Let $f,g\colon R_0\rightarrow R_1$ be two parallel maps of relations on underlying sets $S_i$, and consider the set $S:=\{~s\in S_0~|~fs=gs~\}$, and
+    induce a relation by restricting $R_0$ to that subset. It is a again a reflexive relation and clearly the pair satisfies the universal property
+    of an equaliser of $f$ and $g$.
+    \end{proof}
+}
+
+\section{Transitivity}
+So far our basic categories include $RRel, Rel, Set$ connected by a few free-forgetful adjunctions.
+Add another such category to the chain by considering transitive relations, for that introduce another
+endofunctor on relations.
+\defn{
+    For an arbitrary relation $R \subset S\times S$ with underlying set $S$ consider the $i$-fold
+    composition of $R$ with itself:
+    \[ R^1 := R, R^i:= R\circ R^{i-1} \forall i>0. \]
+
+    More explicitly $R^i = \{~(s,u)\in S\times S~|~\exists (t_1,\ldots,t_{i-1}) \forall j sRt_1, t_{i-1}Ru, t_jRt_{j+1} ~\}$ is
+    the relation defined by all pairs that can be connected by a chain of relations of length $i-1$. Specifically the one-fold
+    iterate is the relation itself with no intermediate connectors.
+
+    Since the iterates are all subsets of a common superset $S\times S$ it also makes unambiguous sense
+    to consider their union:
+    \[ trs(R):= \bigcup_{i\geq 1} R^i, \]
+    which then consists of the original relation $R$, as well as all pairs that were $R$-connectable by some finite
+    sequence of consecutive $R$ relations of $S$ elements. Then call $trs(R)$ (with underlying set $S$) the transitive closure
+    of $R$. It is a functor from relations to itself, call the full subcategory of transitive relations in all relations $TRel$,
+    i.e. the category on objects relations $R$ such that $trs(R)=R$ with all relation maps between them.
+}
+
+There is a reflexive variation on this by introducing the zero-th exponent.
+
+\defn{
+    For an arbitrary relation $R \subset S\times S$ with underlying set $S$ consider the $i$-fold
+    composition of $R$ with itself:
+    \[ R^0 := \lbrack S \rbrack^\delta, R^i:= R\circ R^{i-1} \forall i>0, \]
+    and define the unital transitive closure as the analogous union:
+    \[ trs_1(R):=\bigcup_{i\geq0} R^i, \]
+    it consists of all diagonal elements of the underlying set, hence $trs_1(R)$ is a reflexive relation
+    for any relation $R$. Call the full subcategory of reflexive and transitive relations with all
+    relation maps between them $TRRel$.
+}
+
+\lem{
+    The transitive closure is both the left- and the right-adjoint in the free forgetful adjunction between the
+    category of all relations and the category of transitive relations. It restricts to adjunctions on reflexive relations.
+    \[ trs\colon Rel\Leftrightarrow TRel\colon U, \]
+    \[ U\colon TRel\Leftrightarrow Rel\colon trs, \]
+    and
+    \[ trs\colon RRel\Leftrightarrow TRRel\colon U, \]
+    \[ U\colon TRRel\Leftrightarrow RRel\colon trs. \]
+    \begin{proof}
+    The claim is $TRel(trs(R_0),R_1) = Rel(R_0,UR_1)$, as well as $Rel(U(R_0),R_1) = TRel(R_0,trs(R_1))$, and the according
+    claim for reflexive relations. These are however all trivially satisfied, since the transitive and reflexive relation
+    categories are defined as full subcategories of relations. In other words, there is nothing specifically reflexive
+    or transitive a morphism of relations could satisfy or respect.
+    \end{proof}
+}
+
+Hence follows as before for reflexive relations that the category of transitive reflexive relations has all limits and colimits.
+\lem{
+    The category of transitive reflexive relations is complete and cocomplete, the limits and colimits can be computed just
+    as in relations, hence pointwise.
+    \begin{proof}
+    First consider limits, i.e. a candidate object $lim_I R_i$. The underlying set of $lim_I R_i$ clearly has to be the
+    limit of the underlying $I$-diagram in set. When realised as subset of the product $\Pi_IS_i$, the induced relation is
+    defined by two $I$-tuples in the $S_i$ being in $lim_I$ relation if and only if each of their components are. If each
+    $R_i$ is reflexive, so is the limit-relation, if each $R_i$ is transitive, so is the limit relation. So pullbacks, equalisers,
+    subobjects are all the underlying constructions of reflexive relations as above.
+
+    Considering colimits is a bit more work because of the transitive closure involved.
+    The most salient point about this adjunction is that reflexivity is inherited on quotients, but transitivity is not, so
+    the transitive closure functor has to feature despite the apparent simplicity of the adjunction.
+    Consider hence a candidate object $colim_I R_i$, with underlying set realised by $colim_I S_i$ as a quotient of the
+    disjoint union of the $S_i$ modulo the equivalence relation generated by the $I$-diagram. On that quotient induce
+    the relation \[\lbrack x\rbrack R \lbrack y \rbrack :\Leftrightarrow \exists i\in I, s,t \in S_i\colon \lbrack s\rbrack =\lbrack t\rbrack \in colim_I S_i \wedge sR_it.\]
+    It is reflexive, because each contributing summand contributes the diagonal elements of its underlying set. However there
+    is no reason for a colimit of transitive relations to be transitive itself and in fact it is not in proper generality.
+    So take the transitive closure, which is the same as the unital closure on reflexive relations, $trs(colim R_i)=trs_1(colim R_i)$ of the
+    colimit of the summand relations $R_i$, then this is evidently a transitive relation, which satisfies the universal property
+    of the colimit in transitive relations.
+    \end{proof}
+}
+
+\ex{
+    Let us show an example where the pushout of two transitive relations would not be transitively closed without applying the closure functor.
+    Consider the transitive and reflexive relations $ 1 < 3 < 5 $ and $2 < 3 < 4$ with pushout over $3$, also reflexive and transitive. Then
+    the colimit relation $R$ has all these relations $R=\{(1,1),(3,3),(5,5),(2,2),(4,4),(1,3),(1,5),(3,5),(2,3),(3,4),(2,4)\}$. Hence notice,
+    the first relation introduced a relation $1<3$ and the second one introduced a relation $3<4$, but on its own $R$ has no reason to also
+    introduce $1<4$ in the colimit. Symmetrically in this example for $2<3$ and $3<5$, which needs an additional relation $2<5$.
+
+    Specifically the minimal failing example is the pushout of two "edges" $1<2$ and $2<3$, because $1<3$ only follows after transitively closing.
+
+    The example generalises into the following observation.
+}
+
+\lem{
+    Note that for each set the discrete relation and the collapsible relation on it are reflexive and transitive relations.
+    In the category of sets the following diagram is trivially a pushout for any two elements $s,t\in S$:
+    \[
+    \xymatrix{
+    S\setminus \{s,t\} \ar[r]\ar[d] & S\setminus \{s\}\ar[d]\\
+    S\setminus\{t\}\ar[r] & S.
+    }
+    \]
+    Analogously the following diagram is a pushout in set for each two $s,t\in S$:
+    \[
+    \xymatrix{
+    \{s\} \ar[r]\ar[d] & \{s,t\}\ar[d]\\
+    S\setminus\{t\}\ar[r] & S.
+    }
+    \]
+
+    These induce the following four pushout diagrams in transitive reflexive relations
+    by taking discrete and collapsible relations:
+    For the first diagram get:
+    \[\xymatrix{
+    (S\setminus \{s,t\})^\delta \ar[r]\ar[d] & (S\setminus \{s\})^\delta \ar[d]\\
+    {(S\setminus \{t\})}^\delta \ar[r] & S^\delta,
+    }\]
+    and
+    \[\xymatrix{
+    \Delta^{S\setminus \{s,t\}} \ar[r]\ar[d] & \Delta^{S\setminus \{s\}}\ar[d]\\
+    \Delta^{S\setminus \{t\}}\ar[r] & \Delta^S.
+    }\]
+
+    For the second diagram get:
+    \[ \xymatrix{
+    s^\delta \ar[r]\ar[d] & \{s,t\}^\delta \ar[d]\\
+    {(S\setminus \{t\})}^\delta \ar[r] & S^\delta,
+    } \]
+    and
+    \[ \xymatrix{
+    \Delta^s \ar[r]\ar[d] & \Delta^{\{s,t\}}\ar[d]\\
+    \Delta^{S\setminus \{t\}}\ar[r] & \Delta^S.
+    } \]
+
+    Each of these are pushout diagrams in the category of transitive, reflexive relations.
+    \begin{proof}
+    The universal properties are all readily verified since the underlying maps all involve the above
+    mentioned pushout diagrams in sets, and the induced relations are identified as the above objects.
+
+    The notable point is that without transitive closure the pushouts for $\Delta^\bullet$ would clearly
+    not be transitively closed in general just like in the example above, hence the pushout in the
+    category of reflexive and transitive relations of collapsible relations becomes another collapsible relation.
+    \end{proof}
+}
+\section{Antisymmetry}
+The upshot of this section is that antisymmetry is the only colimit/quotient-troublesome relation of an order relation. It cannot
+be broken by limit constructions, but colimits of antisymmetric things do not need to be antisymmetric. In addition
+there is no natural way to introduce a functor identifying antisymmetric relations as the image of that functor like
+for reflexivity and transitivity. Essentially the fact that the condition induces for each non-trivial relation a non-trivial
+non-existence condition can break antisymmetry of pushouts.
+
+\defn{
+    A relation $R\subset S\times S$ is called antisymmetric, if for all pairs of elements $s,t\in S$ it follows $sRt \wedge tRs\rightarrow s=t$.
+    I.e. there is only ever at most a relation in one direction and not the other.
+
+    Denote the full subcategory of all antisymmetric relations, i.e. on objects relations that are asymmetric and with morphisms all relation maps
+    between them, as $ARel$. Denote the category of antisymmetric reflexive relations $ARRel$, the category of antisymmetric, transitive, reflexive
+    relations $ARTRel$, or by the more common name partially ordered sets, or posets, $Poset$.
+}
+
+\ex{
+    Consider the two relations $\{(0,0),(1,1),(0,1)\}$ and $\{(0,0),(1,1),(1,0)\}$ with intersection the discrete relation
+    $\{(0,0),(1,1)\}$. All three involved relations are antisymmetric, i.e. $\forall x,y \in S\colon xRy \wedge yRx \Rightarrow x=y$,
+    but in the pushout there is the relation $(0,1)$ and the relation $(1,0)$ while $0\neq1$, violating antisymmetry.
+}
+
+This naturally leads to two concepts on general relations.
+The dual object of this is of more immediate use here, but the subobject concept seems easier to understand as the first definition.
+\defn{
+    For any relation $R\subset S\times S$ consider its maximal antisymmetric subrelation $R_<$ as follows, the underlying set $S_<$ is the
+    subset of $S$, where $R$ restrict to an antisymmetric relation:
+    \[ S_< = \{~s\in S~|~\forall t\in S\colon sRt\wedge tRs \rightarrow s=t  ~\}, \]
+    and the induced relation is the restriction of $R$.
+}
+\prop{
+    The maximal antisymmetric subrelation of any relation is in fact antisymmetric.
+    \begin{proof}
+    By definition of $S_<$ this follows for each pair from the condition in two redundant ways.
+    \end{proof}
+}
+\ex{
+    Notice that the maximal antisymmetric subrelation is maximal in that it allows a natural description for arbitrary relations,
+    there may well be antisymmetric relations properly between the whole relation and the maximal antisymmetric quotient as defined above, which are
+    obtained by restricting the relation too, not just the underlying set. There seems to be no natural way to antisymmetrise a relation by
+    picking a subrelation without additional structure on the underlying sets like a total order. Presumably the argument would have to
+    involve strictifying the axiom of choice in the guise of the well-ordering theorem into choosing a well-ordering for each set in a way
+    that becomes a functor after everything is picked. Those details are beyond the scope of this paper in this generality.
+}
+\rem{
+    The maximal antisymmetric suboject is not needed for the constructions of limits, in particular equalisers, subobjects, etc., since the reflexive relation limits
+    of an $I$-diagram with only antisymmetric relations and relation morphisms between them, are antisymmetric without any additional assumptions or constructions.
+    Phrased differently, the maximal antisymmetric subobject of an antisymmetric relation is obviously the relation itself, hence limits of antisymmetric relations
+    agree with their maximal antisymmetric subobjects too.
+}
+\prop{
+    The (reflexive) relation limits of antisymmetric relations are antisymmetric.
+    \begin{proof}
+    In fact reflexivity is not needed for the limit to exist.
+    Note that the induced relation is defined as being in relation in each component. Hence follows from a relation $xRy$ and $yRx$ in the limit
+    a relation in each component, so $x$ and $y$ are equal in each component, hence $x=y$.
+    \end{proof}
+}
+\cor{
+    The category of antisymmetric relations $ARel$ is complete, i.e. has all limits. The limit of reflexive antisymmetric relations is itself
+    reflexive and antisymmetric, hence $ARRel$ is a complete subcategory of $ARel$. Finally posets are respected by limits too, since transitivity
+    is respected on all components, so $Poset=ARTRel$ is a complete subcategory of $ARRel$.
+}
+\rem{
+    Dually to limits there is a bit more to do, for this consider the best approximation "from the right" of an relation to
+    be an antisymmetric relation by compressing the underlying set.
+}
+\defn{
+    For any relation $R\subset S\times S$ introduce its maximal antisymmetric quotient $R^<$ as follows, the underlying set $S^<$ is
+    the underlying set $S$ modulo the equivalence relation generated by pairs violating asymmetry:
+    \[ S^< = S/(x\sim y \Leftrightarrow xRy \wedge yRx). \]
+    Induce a relation on the quotient as before on representatives. The maximal asymmetric quotient of $R$ is reflexive, if $R$ is,
+    it trivially satisfies asymmetry. For a transitive relation however that quotient is not necessarily transitive, so potentially
+    one application of transitive closure is necessary in the relevant categories, where that is part of the colimit, hence quotient construction.
+}
+The following insight provides the cornerstone of why colimits of posets look the way they do.
+\lem{
+    The maximal antisymmetric quotient is left-adjoint to the forgetful functor from asymmetric reflexive relations to reflexive relations:
+    \[ (\bullet)^<\colon RRel \Leftrightarrow ARRel \colon U. \]
+    \begin{proof}
+    The claim is $ARRel(R^<,A)=RRel(R,UA)$. I.e. any morphism from an arbitrary relation uniquely factors through the maximal
+    antisymmetric quotient of $R$. This is easily verified. Specifically for the set of all morphisms from any relation to an
+    antisymmetric relation to universally satisfy that equation find: A morphism that needs the compatibility condition $xAy$ in
+    an antisymmetric relation $A$ coming from an arbitrary relation $R$, can be modified into a morphism that needs $yAx$ satisfied.
+    So the quotient introduces all the relations necessary to make $R^<$ a universal source object associated to any reflexive
+    relation.
+    \end{proof}
+}
+This lemma gives the first fundamental result of this paper.
+\thm{
+    The category of antisymmetric reflexive relations $ARRel$ and antisymmetric reflexive and transitive relations, i.e. posets, $ARTRel=Poset$
+    are both cocomplete.
+    \begin{proof}
+    Consider an arbitrary $I$-diagram in $ARRel$, and the colimit in reflexive relations. Then the resulting relation is not necessarily
+    antisymmetric, but reflexive automatically. Make it reflexive by passing to the maximal antisymmetric quotient, in the category
+    with targets only antisymmetric relations, find that this satisfies the universal property of the colimit in $ARRel$.
+
+    For an arbitrary $I$-diagram in $ARTRel$ take the aforementioned colimit in $ARRel$, by the previous observations that
+    colimit is not necessarily transitive on its own, so in addition take the transitive closure, and find that in the
+    category $ARTRel=Poset$ this satisfies the universal property of the colimit.
+    \end{proof}
+}
+
+\rem{
+    Reemphasise that fact:
+    A limit of posets is just taken componentwise.
+
+    A colimit of posets is given as the componentwise setwise colimit of relations and underlying
+    sets, then forcing asymmetry by an equivalence relation, and then extending with transitive closure.
+    In particular, all small limits and colimits in $ARRel$ and $ARTRel$ exist, but colimits can potentially collapse
+    away a lot of the underlying set.
+}
+
+\section{Total orders}
+The applications in this paper do not need the full force of well ordering, total orders do just fine, hence totality is the
+final property of relations to investigate. To make the constructions natural it is necessary to restrict to specific models
+for sets and relations though.
+\defn{
+    Call a relation $R\subset S\times S$ with underlying set $S$ total, if for each pair $s,t\in S$ at least one of $sRt$ or $tRs$ is satisfied.
+    Call the category of total relations with all relation morphisms between them $ToRel$. Analogously define antisymmetric and transitive
+    variants $AToRel$, $ToTRel$, and for both $AToTRel$. Also call $AToTRel$ by their more common name: totally ordered sets and in analogy
+    with $ARTRel = Poset$ write $AToTRel = Toset$.
+}
+
+\rem{
+    Note that totality defined in this way trivially implies reflexivity, i.e. $ToRRel = ToRel$.
+}
+\lem{
+    Limits of total relations considered as reflexive relations are total and preserve antisymmetry and transitivity.\\[5pt]
+}
+\rem{
+    Notice that the categories of total relations are far smaller than their non-total counterparts. Among other things total
+    relations are "connected", in the sense that for each pair there is a sequence of vertices leading from one element to the
+    other through related pairs. With totality that sequence can in fact be chosen to be exactly one relation for each pair.
+    In particular, discrete relations cannot be total unless empty or the full relation on a one-point set. Neither can sums of posets
+    with two non-empty summands, even if both summands are total posets, i.e. totally ordered sets.
+}
+\rem{
+    This is a triviality by the way the models for categories of relations are set up so far, but with different realisations
+    this should be part of an adjunction. Probably $\bar \Delta$ is the forgetful part of that.
+}
+\prop{
+    The category of totally ordered sets contains the prototypical objects $\bar \Delta^S$ with $(S,\leq)$ a total order and
+    on the underlying set $S$ for $\bar \Delta^S$ the relation defined exactly by $\leq$.
+}
+\rem{
+    Note the similarity to $\Delta^S$, in particular the fact that without the total order on $S$ there is no way to
+    naturally antisymmetrise the construction of the collapsible object without resorting to the maximal antisymmetric quotient.
+    Even for $S$ a poset that is not a toset, there is no way to make $\bar \Delta^(\bullet)$ into a functor with respect
+    to poset maps, because swapping to maxima always breaks the embedding into a total set.
+}
+\rem{
+    There is a more interesting insight to be had in the same vein though.
+}
+\prop{
+    A totally ordered set is exactly a maximal reflexive, antisymmetric, transitive relation given a fixed underlying set.
+    \begin{proof}
+    Let $R$ be a total order on the underlying set $S$, assume it were not maximal among the reflexive, antisymmetric
+    and transitive relation on $S$ with respect to subset inclusion of relations and identity on the underlying vertex
+    set. For $R$ not maximal in $ARTRel$ on $S$ there must exist a pair $(x,y)\in S\times S$ that is not part of $R$,
+    but still allows antisymmetry of $R\cup\{(x,y)\}$. However, $R$ is total, so, if not $xRy$, then $yRx$, so follows
+    $y=x$ from antisymmetry, so $R$ was already maximal.
+
+    If $R$ were maximal among reflexive, antisymmetric, transitive relations but not total, there would be
+    a pair of unequal elements $(x,y)\in S\times S$ which is not $R$-related in either direction. So adding
+    the edge $R\cup \{(x,y)\}$ does not violate antisymmetry, since $yRx$ is not satisfied, reflexivity is
+    not broken, and using the transitive closure if necessary, it is also transitive. Hence $R\cup \{(x,y)\}$
+    generates a strictly greater poset relation on the underlying set, hence $R$ was not maximal.
+    \end{proof}
+}
+
+\chapter{Pairs of Relations}
+\section{Revisiting $ARRel$}
+Consider the category of antisymmetric reflexive relations, i.e. relations that apart from a transitive
+closure are almost posets. Consider the category of pairs, i.e. inclusions of relations $R\rightarrow U$,
+this is the core machine codeable playground section of this paper.
+
+\defn{
+    The category $ARRel^2$ of pairs of antisymmetric reflexive relations is defined as follows:
+    Objects are antisymmetric reflexive relations $A\subset S_A\times S_A, X\subset S_X\times S_X$
+    with underlying sets as indicated,
+    such that $S_A\subset S_X$ and $A|_{S_A\times S_A} \subset X|_{S_X\times S_X}$, i.e. the relation
+    $A$ is at most the restriction of $X$ to $S_A$.
+
+    Morphisms are pairs of morphisms, i.e. respecting the subset relations.
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Putting it all together: Simplicial Complexes and Simplicial Sets}
+It is not traditional to impose a total order on the vertices of a simplicial complex. That however yields the
+set up for a natural functor to simplicial sets.
+\defn{
+    Consider $X$ a pair consisting of an underlying totally ordered set, called the vertex set $(VX,\leq_VX)$, and
+    a fixed subset of all the finite subsets of $VX$: $\sigma X\colon \mathcal{P}_{fin}(VX)$, called the set of simplices.
+
+    If the sets satisfy $VX = \bigcup \sigma X$, i.e. each vertex is contained in some of the chosen
+    subsets, and $\forall t\in \mathcal{P}_{fin}(VX)\colon t\subset s\wedge s\in \sigma X \rightarrow t\in \sigma X$, i.e.
+    $\sigma X$ is closed under taking subsets, then call $X = (VX, \leq_VX,\sigma X)$ a simplicial complex, or short a complex.
+
+    A morphism of simplicial complexes is a map of the underlying vertex set, such that for each source simplex the pushed-forward
+    subset is a simplex of the target.
+}
+
+
+
+
+
+
+
+\chapter{2024-03-18 -- Directed Graphs, Simplicial Complexes and Simplicial Sets}
+\section{DAGs}
+As a descriptive tool, graphs are invaluable in this paper, hence fix that definition first.
+\defn{
+    A directed acyclic graph $G = (V,E)$ is a totally ordered set of vertices $V$ together with an edgelist $E$, i.e.
+    a chosen subset of non-decreasing pairs of $V$, which includes all edge-touched vertices $v$ as duplicate tuples $(v,v)$ too:
+    \[EG\subset \{ ~(v,w)\in V^{\times 2}~|~v\leq_V w~ \wedge (v,v)\in EG \wedge (w,w) \in EG \}.\]
+
+    A morphism of directed acyclic graphs $\varphi\colon G=(VG,EG)\rightarrow(VH,EH)=H$ is a map on vertices $\varphi\colon VG\rightarrow VH$,
+    that can be restricted to a map on edges. Clearly $\varphi\colon VG \rightarrow VH$ induces a natural map $\varphi\times \varphi\colon VG\times VG \rightarrow VH\times VH$,
+    which can be restricted to $EG$, if it is satisfied that $(\varphi\times\varphi)_*(EG)\subset EH$, call $\varphi$ a morphism of directed acyclic graphs.
+}
+\rem{
+    Since a finite directed graph is acyclic if and only if it admits a topological ordering, this recovers
+    the classical notion on finite graphs. Taking colimits over finite subgraphs recovers the total notion.
+}
+\rem{
+    Note however that this definition of morphisms is not the same definition as a lot of algebraic graph theory
+    and other references that use homotopies on graphs have. Explicitly, the above definition of morphism allows
+    to collapse edges onto vertices, and the graphs have no vertex loops. It is a minor detail, but it changes the
+    terminal object, the product structure, etc.
+}
+\rem{
+    The notion "directed acyclic graph" is a classic well-established wording, however, the "acyclic" clashes quite unfortunately with
+    the topological applications of this paper, where acyclic has a lot stronger connotations.
+
+    As a consequence, in what follows they are only called {\it dag}s, even just graphs, when it is unambiguous. Undirected graphs,
+    graphs with loops, multigraphs, all such variations are not subject of this paper anywhere, hence there should be no confusion.
+}
+
+\section{Simplicial Complexes}
+
+Start by fixing the most bird's eye view of how a simplicial complex can be defined.
+
+Note that choosing a total order on the vertices is usually not part of the definition. It is however part of every
+example the reader will ever see. It is of essential use in the identification of dags, complexes and simplicial sets,
+but plays a silent role in the definition.
+
+\defn{
+    A simplicial complex $X=(VX,\leq_{VX},\sigma X)$ is a triple consisting of any set of vertices $VX\in Set$,
+    together with a chosen total order $\leq_VX$ on the vertices, and $\sigma X$ a fixed subset of finite subsets
+    of $VX$, which is closed under taking subsets. I.e. any subset of the vertices $VX$ that is a subset
+    of an element of $\sigma X$ is itself an element of $\sigma X$:
+    \[\forall S\subset VX \colon (\exists T \in \sigma X\colon S\subset T) \Rightarrow S \in \sigma X.\]
+    Call an $(n+1)$-element subset (canonically ordered by restricting $\leq_{VX}$)
+    $(v_0<_{VX}\ldots<_{VX}v_n)=t\in\sigma X$ an $n$-simplex of $X$, and hence call $\sigma X$ the set of $X$'s simplices.
+    In addition assume for each $v\in VX$ that its associated $0$-simplex is actually a simples $\{v\}\in\sigma X$.
+
+    A morphism of simplicial complexes $\varphi\colon X = (VX,\leq_{VX},\sigma X)\rightarrow Y = (VY,\leq_{VY},\sigma Y)$, is
+    a set map $\varphi\colon VX \rightarrow VY$, which respects the chosen simplex sets:
+    \[ \forall s\in \sigma X\colon s = (s_0<\ldots<s_n) \Rightarrow \varphi_*(s)=\{ \varphi(s_i) \}_{0\leq i\leq n} \in \sigma Y, \]
+    where $\varphi_*(s)=\{ \varphi(s_i) \}_{0\leq i\leq n}$ is a subset of the $VY$ vertices, which is potentially strictly
+    smaller than $s$, if a vertex is repeated.
+}
+\rem{
+    Note that assuming vertices are $0$-simplices is not a loss of generality. Because for a pair $X=(VX,\sigma X)$,
+    satisfying the other properties, the set $\bigcup \sigma X$ that is the union over all the finite subsets appearing in $\sigma X$
+    is a reduced vertex set satisfying that assumption.
+
+    In particular a morphism of simplicial complexes is uniquely determined by its restriction to either vertices or simplices.
+}
+\rem{
+    Given a set map of vertices $\varphi_V\colon VX\rightarrow VY$, it induces a map of finite subsets by applying $\varphi$ elementwise,
+    hence covariantly: $\varphi_*\colon \mathcal{P}(VX) \rightarrow \mathcal{P}(VY)$.
+
+    For $\sigma X \subset \mathcal{P}(VX)$ and $\sigma Y \subset\mathcal{P}(VY)$, $\varphi$ is a simplicial map if and only if, restricting
+    to $\sigma X$ has its image in $\sigma Y$, i.e. $\varphi_*$ induces a well-defined map of the simplices by restriction $\varphi_*\colon \sigma X \rightarrow \sigma Y$.
+    Restricting to $\sigma X$ is not a condition, being able to restrict to $\sigma Y$ is the salient point.
+}
+\rem{
+    Since the content of this paper is about dags, simplicial complexes and simplicial sets, occasionally emphasise them apart as: dags, complexes, spaces.
+}
+
+\section{Complexes and DAGs}
+\thm{
+    Restricting a simplicial complex $X$ to its vertices and $1$-simplices defines a dag $sk_1X=(VX,\{~ e \in \sigma X~|~ |e|\leq 2 ~\}$.
+    Any directed acyclic graph $G=(VG,EG)$ in turn defines a simplicial complex, its flag complex $Flag(G)=(VG,\sigma(G))$ with $\sigma G$ the finite subsets
+    of $VG$ such that for each pair in that subset the edge is part of $EG$:
+    \[ Flag(G):=\{~\{(v_0\leq_{VG} v_1 \leq_{VG} \ldots \leq_{VG} v_n)\} \in VG^* ~|~ \forall i\leq j\colon (v_i,v_j)\in EG ~\}. \]
+    Each of these are functors, i.e. maps of simplicial complexes induce dag-maps on the $1$-skeleton and maps of dags induce simplicial complex maps on the
+    flag complexes, respecting composition and identities covariantly.
+    \begin{proof}
+    Given a simplicial complex $(VX,\leq_{VX},\sigma X)$ define the vertex set as just the same vertex set $VX$ and the edgelist as the simplices
+    of dimension less than or equal to $1$. The total order on $VX$ makes these simplices into non-decreasing tuples unambiguously.
+    Clearly a simplicial map in particular induces a map of the $1$-skeletons, since it at most reduces degrees, but never increases a simplex degree.
+    Hence follows also the composition and identity property.
+
+    Given a dag $(VG,\leq_VG,EG)$ define the vertex set as just the same vertex set $VG$,
+    and for each sequence of edges that are transitively closed in $EG$ add a simplex of appropriate size in $\sigma Flag(G)$:
+    \[\sigma Flag(G) := \{ ~\{v_0\leq_VG v_1 \leq_VG \ldots \leq_VG v_n \} ~|~ \forall i\leq j\colon (v_i,v_j)\in EG ~\},\]
+    where $\{ v_0,v_1,\ldots,v_n\}$ is the set underlying the tuple $(v_0,\ldots,v_n)$, which could potentially have fewer elements than
+    the tuple because our edgelist includes the vertices too $(v,v)$. In particular it is trivially satisfied that $\sigma Flag G$ is closed
+    with respect to subsets. The tuple $Flag(G)=(VG,\leq_VG,\sigma Flag G)$ hence defines simplicial complex.
+
+    A map of vertices that respects edges clearly induces a map of flag complexes, the identity induces the identity, composition is respected covariantly.
+    \end{proof}
+}
+\thm{
+    Taking the $1$-skeleton of a $Flag$ complex of a dag naturally is exactly the same dag set wise. I.e. \[ sk_1\circ Flag = id_{DAG}. \]
+    \begin{proof}
+    Consider a dag $(VG,EG)$, then its flag complex consists of simplices the vertices $VG$ and flags defined by $EG$. The $1$ skeleton of the
+    flag complex consists of the vertices, which are $VG$, and the $1$-flags, i.e. pairs of vertices $(v_0,v_1)$ such that $(v_0,v_1)\in EG$, so that
+    is exactly $EG$.
+    \end{proof}
+}
+\thm{
+    The $Flag$ complex of the $1$-skeleton of a simplicial complex has a natural inclusion from the original complex. I.e.
+    \[ \exists \eta\colon Id_{sCx}\Rightarrow Flag\circ sk_1. \]
+    \begin{proof}
+    A map of simplicial complexes is uniquely determined by what it does on vertices. Do note that $Flag(sk_1(X))$ and $X$ have
+    the same vertices by definition, hence it remains to check, that the identity induces a simplicial map, i.e. respects simplices.
+
+    Given any simplex $s=(s_0<\ldots<s_n)\in \sigma X$, note that all the subsets $(s_i,s_j)$ are part of the $1$-skeleton, hence part
+    of the edges of the $1$-skeleton. So by constructing the flag complex $s$ is in particular an element of $\sigma Flag(sk_1(X))$.
+    \end{proof}
+}
+\ex{
+    Be very aware that this is usually a proper inclusion. Consider the simplicial complex $(\{0,1,2\},\{0,1,2,01,02,12\})$. Reducing to
+    the $1$-skeleton is basically the same pair, but extending via flag complex induces the simplex $\{012\}$ that was not there before.
+
+    In particular from a topological point of view this is the inclusion of a circle into a disc, so very much not an equivalence in any
+    desirable sense.
+}
+
+There is however a big class of simplicial complexes for which the reverse direction is the identity too, for which the following definition
+is needed.
+
+\defn{
+    Given a simplicial complex $(VX,\leq_VX,\sigma X)$, define its subdivision $sd(X)$ as follows, the vertices are $V_{sd(X)}=\sigma X$, with total
+    order induced by ordering the (finite!) tuples first by length, then order ordered tuples lexicographically according to $\leq_VX$,
+    inducing a total order on $V_{sd(X)}$. The simplices are all chains of
+    vertices $(v_0,v_1,\ldots,v_n)\in (\sigma X)^{n+1}$ such that $v_i \subset v_j \forall i\leq j$.
+}
+
+Subdivided simplicial complexes actually have a defining dag.
+
+\prop{
+    The subdivision of a simplicial complex is in fact the flag complex of a defining dag on vertices $\sigma X$, totally ordered as above, and
+    edges included according to subset relation, identity in particular.
+    \begin{proof}
+    Note the ordering of vertices of $sd(X)$ implies that each edge of $sd(X)_1$ is in fact
+    non-decreasing with respect to that length and lexicographic order. The vertices of that graph are the totally ordered set $\sigma X$. It is
+    easy to see that the flag complex of this graph is exactly the definition above.
+    \end{proof}
+}
+
+Hence because one side of the composition strictly equals the identity get that:
+
+
+\prop{
+    On the category of simplicial complexes which are at least once subdivided the flag complex of the $1$-skeleton yiels the exact same complex
+    $Flag\circ sk_1 \circ sd = id_{sCx}\circ sd$. I.e. the whole simplicial complex can be exactly setwise recovered from its vertices and edges.
+}
+
+
+In fact the category of simplicial complexes which are equal to their flag complex is far bigger, one has to exclude only the above mentioned example
+in a universal manner.
+
+\prop{
+    Let $(VX,\leq_VX,\sigma X)$ be a simplicial complex. Assume additionally it satisfies on $1$-simplices
+    \[\forall u\leq_{VX} v\leq_{VX} w \in VX\colon (u,v),(v,w),(u,w) \in \sigma X \Rightarrow (u,v,w) \in \sigma X.\]
+    Call the simplex $(u,v,w)$ a witness for the transitivity of $u,v,w$.
+
+    Then $X$ is the flag complex of its $1$-skeleton.
+    \begin{proof}
+    By induction the aforementioned condition in fact implies that every such flag of vertices with pairwise edges between
+    them gives rise to a simplex in $\sigma X$ already. In particular, every simplex of $\sigma X$ is of that form. Hence $X$ is the flag complex of its $1$-skeleton, its
+    edgelist.
+    \end{proof}
+}
+\cor{
+    The subdivision satisfies the above condition, hence the identity $Flag(sk_1(sd(\bullet))) = sd(\bullet)$ follows as a corollary to the above proposition, too.
+}
+\ex{
+    Note that there are basically two ways in which a simplicial complex can satisfy the condition. It is about either thin paths or transitive closures. Consider one extreme:
+    \[ (0123,\{0,1,2,3,01,12,23,03\}), \]
+    this is a path from $0$ to $3$ together with a direct shortcut edge $03$. It is the flag complex of its $1$-skeleton, since for no two pairs of composable edges $(u,v),(v,w)$
+    there is a third pair $(u,w)$ which would necessitate a $2$-simplex witnessing the transitivity $(u,v,w)$.
+
+    On the other extreme consider a full simplex, i.e. \[ (012\ldots n,\mathcal{P}(\{0,1,\ldots,n\})). \]
+    Then obviously for each triple of edges that should be transitive, there is a $2$-simplex witnessing that transitivity, so the flag complex introduces no new simplices.
+}
+\section{Spaces - Simplicial Sets}
+Introduce simplicial sets in a manner that is compatible with how dags and complexes are fixed.
+\defn{
+    Fix a pair of a sequence of totally ordered sets indexed over finite totally ordered sets $X=((X_S)_{S\in Fin_\leq},\{\phi^*\})$ together with for each map of finite totally ordered
+    sets $\phi\colon (S,\leq_S) \rightarrow (T,\leq_T)$ a chosen "induced map" in the opposite direction $\phi^*\colon X_T \rightarrow X_S$.
+
+    If the chosen $\phi^*$ satisfy the contravariant functoriality condition \[\phi^*\psi^* = (\psi\circ\phi)^*~~\wedge~~ id_S^* = id_{X_S},\] call the pair of sets and induced maps
+    $X=((X_S)_{S\in Fin_\leq},\{\phi^*\})$ a simplicial set or a space, and the elements $x\in X_S$ the $S$-simplices of $X$.
+
+    A morphism of simplicial sets $f\colon X\rightarrow Y$ is a degreewise set-map $f_S\colon X_S \rightarrow Y_S$, i.e. a map of $S$-simplices for each finite totally ordered set $S$,
+    which is compatible with the induced maps $\phi^*$ on $X$ and $Y$, i.e.
+    $\forall S,T \forall \phi_\leq\colon S\rightarrow T, f_S\circ\phi^*=\phi^*\circ f_T.$
+}
+\rem{
+    Note that the choice of morphisms legitimises writing $\phi^*$ instead of the more explicitly descriptive $\phi^*_X$ and $\phi^*_Y$.
+
+    Note also again, just like for dags and complexes, each set of $S$-simplices is chosen to be totally ordered, but it did not enter the definition in any other way.
+    It serves to set up the correspondence between simplicial sets and simplicial complexes.
+}
+\defn{
+    For a simplicial set $X = ((X_S)_S, \{~\phi^*\colon X_T\rightarrow X_S ~|~\phi \in Fin_\leq(S,T)~\}_{S,T}$ and $x\in X_S$ any $S$-simplex and $i\colon \bar S \rightarrow S$ a proper injection
+    of finite totally ordered sets, call such a $i^*x$ a face of $x$. For $x\in X_S$ any $S$-simplex and $p\colon \bar S \rightarrow S$ a proper surjection call $p^*x\in X_{\bar S}$ a degeneracy
+    of $x$.
+
+    For the specific finite totally ordered sets $\lbrack n \rbrack := \{0,\ldots,n\}\subset (\N,\leq_\N)$ ordered as subsets of the natural numbers, simply call the $\{0,\ldots,n\}$-simplices
+    $n$-simplices, and write: $X_n := X_{\{0,\ldots,n\}} = X_{\lbrack n \rbrack}$.
+}
+\rem{
+    Note that a simplicial set is uniquely determined by its $n$-simplices given for each $n\in \N$, since each finite totally ordered set has a unique isomorphism to a set of the form $\lbrack n \rbrack$.
+    Hence the induced maps of the simplicial provide the rest of the structure on arbitrary finite totally ordered sets. In particular, it is natural to assume the total order on $n$-simplices is the
+    same as on $S$-simplices for all other $n$-element sets $S$ identified along the canonical isomorphism $(S,\leq_S)\rightarrow (\lbrack n\rbrack,\leq_\N)$.
+    Hence a simplicial set can be defined only by defining its $n$-simplices.
+}
+\section{Complexes are Spaces - Simplicial Complexes are special Simplicial Sets}
+\subsection{Simplicial Complexes are Simplicial Sets}
+This is how the total orders enter, with these definitions a simplicial complex is just a special type of simplicial set.
+\lem{
+    Each simplicial complex $X$ has a unique naturally associated simplicial set $sX$, in particular, morphisms of simplicial complexes
+    naturally induce morphisms of their associated simplicial sets.
+    \begin{proof}
+    Let $X=(VX,\leq_VX,\sigma X\subset \mathcal{P}(VX))$ be a simplicial complex, i.e. $VX$ the set of vertices,
+    totally ordered by $\leq_VX$ and $\sigma_X$ a subset-closed subset of the finite subsets of $X$-vertices $VX$.
+
+    Define a simplicial set $sX$ associated to $X$ as follows on $n$-simplices only: \[ sX_n:= \{~s\in VX^{\times (n+1)}~|~ \forall i\leq j\colon s_i\leq s_j \wedge \{s_i\}_{0\leq i\leq n} \in \sigma X ~\}. \]
+    I.e. $n$-simplices are $VX$-ordered $n+1$-tuples $s$ of $VX$, such that the set with duplicates removed $\{s_i\}_{0\leq i\leq n}$ is part of the original $\sigma X$ simplices of $X$.
+
+    To define the induced maps for $X$, given a map of finite totally ordered sets $\phi\colon \lbrack m \rbrack \rightarrow \lbrack n\rbrack$,
+    and an element $s\in sX_n = \{~s\in X^{\times (n+1)}~|~\forall i\leq j\colon s_i\leq s_j \wedge  \{s_i\}_{0\leq i\leq n} \in \sigma X ~\}$.
+    By applying the set-map $\phi$ on indices $s = (s_0<\ldots<s_n)$ define $\phi^*(s) = \{s_{\phi(i)}\}$, i.e. the subset of $\sigma X$
+    defined by taking the $\phi$ image of $s$ according to its tuple/$\leq_VX$-indices.
+
+    It easily follows that $id^* = id$ and $(\psi\varphi)^*=\varphi^*\psi^*$, hence $sX$ is a simplicial set. Furthermore a morphism of simplicial complexes
+    evidently induces a compatible morphism of these simplicial sets. The identity if started with the identity, and respecting compositions covariantly.
+    \end{proof}
+}
+\subsection{Simplicial Complexes are a specific subcategory of Simplicial Sets}
+The fun part is to go back! For that as a first step identify which simplicial sets come from simplicial complexes.
+
+Note that the condition on simplicial sets basically recalls the well-known notion that a morphism of simplicial complexes is uniquely determined
+by what it does on vertices, which is part of our definition too.
+\thm{
+    Let $X = ((X_S)_S, \{~\phi^*\colon X_T\rightarrow X_S ~|~\phi \in Fin_\leq(S,T)~\}_{S,T}$ be a simplicial set.
+
+    If the simplices of $X$ satisfy that having all faces equal already implies equality for each pair of simplices, then $X$ is a simplicial set constructed like above.
+    I.e. if for all $x,y\in X_S$ and for all proper injections $i\colon T\rightarrow S$ the simplices $x$ and $y$ satisfy $i^*x=i^*y$, then $X$ is naturally isomorphic
+    to a naturally associated simplicial complex $\bar X$ with associated simplicial set $s\bar X\cong X$.
+    \begin{proof}
+    For $X$ a simplicial set define the vertex set $VX = X_0 = X_{\{0\}}$ the $0$-simplices of $X$. Induce the total order from the total order on $0$ simplices.
+
+    For $j_i\colon 0 \rightarrow n$ the (trivially order preserving) map that sends $0$ to $i$, defined for each $0\leq i \leq n$, note
+    that the uniqueness condition means, one can uniquely describe an $n$-simplex $x\in X_n$ with the set of its vertices $(j_0^*x,j_1^*x,\ldots,j_n^*x)$.
+    Note however that not every such tuple of vertices is a simplex in $X$ obviously.
+
+    So define $\sigma \bar X := \{~ \{ (j_0^*x,j_1^*x,\ldots,j_n^*x) \} \in VX^{\times n} ~|~\forall n\in\N,  x\in X_n. ~\}$.
+    I.e. define the simplicial complex $\bar X$ to be given by the $0$-simplices of $X$ as vertices, totally ordered as in $X$, and higher simplices are exactly the
+    subsets of vertices that can be written as induced by $j_i$ tuples like above. Since the set $\{j_i\}$ is a generator in the category of finite totally ordered
+    sets, it actually implies $i^*x = i^*y$ if $(j_0^*x,j_1^*x,\ldots,j_n^*x)=(j_0^*y,j_1^*y,\ldots,j_n^*y)$, because each injection can be reconstructed from including
+    points one by one inductively.
+
+    Clearly the subset condition on $\sigma \bar X$ is satisfied, by considering restriction of a simplex along inclusions $\lbrack n-1 \rbrack \rightarrow \lbrack n \rbrack$, i.e. faces.
+
+    Consider the simplicial set that $\sigma \bar X$ generates according to the lemma immediately above. Clearly on vertices the identity is a natural map on level $0$, and
+    note that the condition implies exactly that one can uniquely reconstruct any $n$-simplex from its vertex-tuple like above, so the map of simplicial sets
+    \[ j_* \colon X \rightarrow s\bar X \]
+    defined by sending an $n$-simplex $x$ to $(j_0^*x,j_1^*x,\ldots,j_n^*x)$, is evidently compatible with the respective induced maps from finite
+    ordered sets, because set maps are defined pointwise. It is injective in each degree by assumption and trivially surjective by construction
+    of $\sigma \bar X$. Hence $X$ is naturally isomorphic to the simplicial set of the simplicial complex $\bar X$, thus follows the claim.
+    \end{proof}
+}
+\cor{
+    This implies in particular that for a simplicial set, which is a simplicial complex in the sense of the above theorem, all its simplicial subobjects are
+    automatically simplicial complexes too, because the condition gets easier to satisfy on subsets.
+}
+\rem{
+    Note that the correspondence over the maps $j_i$ allows to assume without loss of generality that simplices of a simplicial complex are given as such
+    tuples of vertices. For general simplicial sets a priori this is not a requirement and also not helpful, because simplicial sets are precisely about allowing
+    multiple simplices with the same faces, hence they can usually not be represented like this.
+}
+In particular it follows in the category of simplicial sets too:
+\thm{
+    Any morphism from the simplicial set associated to a simplicial complex to any other simplicial set is uniquely determined
+    by what it does on vertices / $0$-simplices. % strong indication for X -> VX left adjoint to something
+}
+\section{Simplicial Sets can be resolved by a pair of Simplicial Complexes}
+\thm{
+    Let $X = ((X_S)_S, \{~\phi^*\colon X_T\rightarrow X_S ~|~\phi \in Fin_\leq(S,T)~\}_{S,T}$ be a simplicial set. Then
+    there is an inclusion of simplicial complexes $A\rightarrow Z$, which as a quotient in simplicial sets exactly yields $X$.
+    \begin{proof}
+    By (if necessary transfinite) induction, assume finitely many non-degenerate simplices in $X$. I.e. consider each simplicial set
+    as the colimit over its subsets with finitely many non-degenerate simplices, the finite steps that follow still apply consistently.
+
+
+    \end{proof}
+}
+\section{}
+\thm{
+    \[ sFlag(sk_1(sd^2(X))) = sd^2X \]
+    for all simplicial SETS $X$.
+}
+
+\end{document}

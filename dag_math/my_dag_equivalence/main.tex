@@ -1,0 +1,531 @@
+% This file is part of beamerthemepureminimalistic.
+
+% If problems/bugs are found or enhancements are desired, please contact
+% me over: https://github.com/kai-tub/latex-beamer-pure-minimalistic
+
+\documentclass[a4paper]{book}
+\include{version}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{Remi}[thm]{Reminder}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{nonex}[thm]{{\bf NON}-Example}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{Exercise}[thm]{Exercise}
+\newtheorem{Code}[thm]{Pseudocode}
+\usepackage{datetime2}
+\usepackage{graphicx}
+\usepackage{svg}
+% \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
+\usepackage{svg-extract}
+\usepackage{hyperref}
+\usepackage{inconsolata}
+
+\usepackage{tcolorbox}
+
+\usepackage[all]{xy}
+\usepackage{xypic}
+\usepackage{xcolor}
+
+\definecolor{light}{RGB}{0,100,43}
+\definecolor{dark}{RGB}{130,0,100}
+\definecolor{exercise}{RGB}{220,200,255}
+\definecolor{textcolor}{RGB}{0, 150, 128}
+\definecolor{title}{RGB}{150, 0, 128}
+\definecolor{footercolor}{RGB}{0, 128, 64}
+\definecolor{code}{RGB}{240,220,160}
+\definecolor{codebg}{RGB}{50,50,50}
+\definecolor{mathbg}{RGB}{0,10,30}
+\definecolor{mathtext}{RGB}{220,220,250}
+\definecolor{bg}{RGB}{32, 0, 16}
+
+\def\exercise#1{\color{light}{\h\Exercise{\color{exercise}\scshape #1}}\color{textcolor}}
+\def\code#1#2{\color{dark}{\h\Code{\h}\\[.5em]%
+\color{mathtext}#1
+\begin{tcolorbox}[colback=codebg]%
+\color{code}%
+\texttt{#2}%
+\color{textcolor}%
+\end{tcolorbox}\color{textcolor}}}
+
+\def\backtick{`}
+\def\curtime{\DTMdate{2023-09-21} ~\DTMtime{01:42:17}\DTMdisplayzone{-5}{00}}
+\def\light#1{{\color{light}#1}}
+\def\dark#1{{\color{dark}#1}}
+\def\h{\hspace{1em}}
+
+\def\signature{\href{mailto:marc@lange-data.org}{Dr. Marc Lange, marc@lange-data.org}}
+\def\mailsignature{\href{mailto:marc@lange-data.org}{marc@lange-data.org}}
+
+\def\abs#1{\left| #1 \right| }
+\def\floor#1{\lfloor #1 \rfloor }
+
+\newcommand{\lthree}{<\hspace{-5.2pt}3}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\C}{\mathcal{C}^{\leq}_{+} }
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\LL}{\mathcal{L}^1(\Z,\Z)}
+
+\renewcommand{\dag}{\mathrm{emb}\mathcal{DAG}}
+
+
+\newcommand{\s}{Set^{\phantom{\leq}}_{\phantom{+}}}
+\newcommand{\spp}{Set=fSet}
+\newcommand{\smp}{Set^{\leq}_{\phantom{+}}}
+\newcommand{\spm}{Set^{\phantom{\leq}}_{+}}
+\newcommand{\smm}{Set^{\leq}_{+}}
+\newcommand{\spmpm}{Set^{\pm}_{\pm}}
+
+\newcommand{\App}{A}
+\newcommand{\Amp}{A^{\leq}_{\phantom{+}}}
+\newcommand{\Apm}{A^{\phantom{\leq}}_{+}}
+\newcommand{\Amm}{A^{\leq}_{+}}
+
+\begin{document}
+\chapter{Counting DAGs}
+\section{Basic Facts and Definitions}
+I recall the definition of directed acyclic graphs informally here, in favour of providing a more
+precise definition tailored to this paper's use case later.
+\defn[Directed Acyclic Graph]{
+    A directed graph $G = (V,E)$ with $E \subset V\times V$, is called acyclic, if there is no (finite) chain
+    of vertices $(v_0,v_1,\ldots,v_n)$ with $v_i \in V, 1<n, (v_i,v_{i+1}) \in E$,
+    such that at least one of the vertices $v_i$ has
+    been visited twice:
+    \[ G=(V,E\subset V\times V) ~~~ \mathrm{dag} \]
+    \[\colon\leftrightarrow  \forall n\geq2 \forall (v_0,v_1,\ldots,v_n) \in V^{\times n} \colon ( \forall i\colon (v_i,v_{i+1}) \in E \Rightarrow \forall i\neq j\colon v_i\neq v_j ). \]
+
+    Do note in particular that despite the fact that this is an infinite schema of axioms, it is finite for each specific finite digraph.
+    More specifically, it could be coded to check an arbitrary digraph for dag-ness. In this text I will not use this however, our digraphs
+    will come as dags plain by their code-friendly presentation.
+}
+
+\prop[Sources and Sinks exist]{
+    \label{sources}
+    Any finite dag has a vertex that has no outbound edges and a vertex that has no inbound edges.
+    \begin{proof}
+        Assume for contradiction that there is no vertex with no outbound edge, then choose any one of them, and append any next vertex,
+        if there's an edge pointing to it from your current vertex. Since there's no sink, this process can continue infinitely, since
+        our graph is finite, eventually we repeat a vertex. This is a contradiction to acyclicity as described above.
+
+        The same argument applies to the digraph with inverted edges or just by walking the path backwards instead.
+    \end{proof}
+}
+
+\defn[Topological Ordering]{
+    If for a graph $G=(V,E)$ we have a graph homomorphism:
+    \[ \varphi: G \rightarrow \Delta^{\abs{G}} = (\abs{G}=\{0,\ldots,\abs{G}\},\leq) \subset \N  \]
+    which is injective on nodes, call $\varphi$ a topological ordering of $G$.
+
+    More explicitly:
+    If there exists a finite $n\in\N$ and a bijection $f \colon V \rightarrow \{0,\ldots,n\}$ such that
+    $(i,j) \in E \Rightarrow fi \leq fj \in \N$ for all edges in $E$, then that bijection $f$ induces
+    a topological ordering $\varphi$ like before.
+}
+
+\prop[Finite dags have topological orderings]{
+    A digraph is a dag iff it has a topological ordering (necessarily non unique for non-trivial cases).
+    \begin{proof}
+        Assume a graph has a topological ordering, if it had a cycle, at least one edge would point backwards in that
+        ordering, to contradiction. So the existence of a topological ordering implies the dag-ness of a (di)graph.
+
+        Assume now an abstract dag $G = (V,E)$, we want to construct a bijection $\varphi\colon V\rightarrow \abs{V}$,
+        such that $\varphi(i)\leq\varphi(j)$ whenever there is an edge $(i,j) \in E$ (recall: and no condition otherwise).
+
+        By \hyperref[sources]{the fact that sources and sinks exist}, choose a source $s$. Since it has no inbound connections,
+        set its label to $0$. Now remove $s$ from the graph $G$ with all edges that pointed from $s$ to $G$ and find that
+        subgraph is a dag, too, so it has a source, that can be labelled $1$, and so forth up until all vertices have been
+        exhausted.
+    \end{proof}
+}
+
+\cor[Minimal topological orderings]{
+    Each dag can be given a minimal topological ordering, that is, a bijection of its vertex set to an interval $\{0,\ldots,\abs{V}-1\}$
+    that induces a graph homomorphism. (Corollary to the proof before.)
+}
+
+\section{The Category $\dag$ of embedded DAGs}
+
+The section before discusses among other things that
+each finite directed acyclic graph can be embedded in the complete finite directed acyclic graph of its vertex order.
+Using that we reach the following definition for a combinatorial category of dags.
+
+\defn[$\dag$]{
+    Define the category $\dag$ as follows: \\
+    As objects we have a chosen natural number $n\in\N$, call it vertex count, together with
+    a chosen subset $E\subset \{0,\ldots,n-1\}\times\{0,\ldots,n-1\}$, which satisfies:
+    \[ \forall (i,j) \in E\colon 0\leq i < j < n   ~~~~ (\mathrm{top}) , \]
+    call $E$ the edge set of the object $(n,E)$.
+
+    As morphisms we have all! set maps $f\colon \{0,\ldots,n-1\}\rightarrow \{0,\ldots,m-1\}$ for dags $(n,E),(m,F)$, such that:
+    $\forall (i,j)\in E \colon (fi,fj) \in F$, i.e.
+    \[ \dag((n,E),(m,F)) \]
+    \[= \{ f\colon \{0,1,\ldots,n-1\} \rightarrow \{0,1,\ldots,m-1\} ~|~ (i,j) \in E \Rightarrow (fi,fj) \in F \vee fi=fj \}. \]
+}
+
+
+\rem{
+    For clarity, the induced graph of such an object has vertex set $\{0,\ldots,n-1\}$ and edges as defined by $E$.
+}
+
+\rem{
+    By the discussion above we can see, that the topological ordering has in fact been incorporated into this definition,
+    so that the induced graph associated to a pair $(n,E)$ that satisfies the condition $\mathrm{top}$, is necessarily
+    a dag. In particular in what follows there is no need to check the acyclicity condition, it is
+    actually a given fact in $\dag$. Instead, in this category we need to keep compatible maps to $\N$ along.
+}
+
+\rem{
+    One could instead choose the convention to consider dags with loops at each vertex, with would make
+    the vertex set a recognisable subset of $E$, in which case the objects could be fully described by
+    edge sets. Occassionally that might be a helpful extra perspective to consider, specifically when handling
+    graph homomorphisms I jump between those conventions as convenient.
+}
+
+\rem{
+    The category $\dag$ in particular admits an upper bound on counting how many dags there
+    are on a fixed number of nodes. Do note from vertex count 3 on, isomorphic dags can have different
+    representations in $\dag$, e.g. $\{0,1,2\},\{(0,1)\}$ and $\{0,1,2\},\{(0,2)\}$ are isomorphic,
+    but each legitimately different objects in $\dag$.
+}
+
+
+\ex{
+    The class of dags we need most instantly are complete graphs, which in accordance with topology I will call $\Delta^n$:
+    \[V(\Delta^n) = \{ 0, 1, \ldots, n \}, E(\Delta^n) = \{ (i,j) ~|~ i<j \}.\]
+    These are the edge count maximal objects in their vertex count, as in, there is no other dag on $n+1$ nodes with more or equally many edges to the $\Delta^n$ objects each in their degree.
+}
+
+\ex{
+    For some more non-trivial examples:
+     \[ \S^0 = ( \{0,1\},\{\} ), \]
+     \[ \S^1 = ( \{0,1,2,3\},\{02,12,03,13\} ), \]
+     \[ \S^2 = ( \{0,1,2,3,4,5\},\{02,12,03,13,04,14,24,34,05,15,25,35\} ). \]
+    In a bit we will exhibit how these are actual spheres.
+
+    It is however visually convincing:
+
+    \[\S^0 =\xymatrix{0&1,}\]
+    \[\S^1 =\xymatrix{ & 2 & \\ 0 \ar[dr]\ar[ur]& &1\ar[ul]\ar[dl] \\ & 3,&}\]
+    \[\S^2 =\xymatrix{   &
+                            &  & 4 &                                 \\
+                         & 0\ar[d]\ar[ddr]\ar[urr]\ar[rrr]
+                            &  &   & 2 \ar[ul] \ar[ddll]             \\
+                         & 3 \ar[dr]\ar[uurr]
+                            &  &   & 1 \ar[u]\ar[uul]\ar[dll]\ar[lll]\\
+                         &
+                            &5 &   & }\]
+}
+
+\defn[Cone and Suspension $C, \Sigma$]{
+    In addition we have a cone and suspension construction:
+
+    Let $G=(\{0,\ldots,n-1\},E)$, construct $CG$ with vertices $V(CG) = \{0,\ldots,n\}$
+    and edges: $E(CG) = E(G) \sqcup \{ (i,n) | i \in \{0,\ldots,n-1 \} \}.$
+
+    Let $G=(\{0,\ldots,n-1\},E)$, construct $\Sigma G$ with vertices $V(\Sigma G) = \{0,\ldots,n,n+1\}$
+    and edges: $E(CG) = E(G) \sqcup \{ (i,n) | i \in \{0,\ldots,n-1 \} \} \sqcup \{ (i,n+1) | i \in \{0,\ldots,n-1 \} \}.$
+
+    These are actual cones and suspensions as well.
+}
+
+\ex{
+    For illustration consider the diagrams of $C\S^0$ and $\Sigma\S^0$:
+    Start with $\S^0$:
+    \[\xymatrix{0&1}\]
+    add a cone point ($2$) and edges to it
+    \[\xymatrix{0 \ar[r] & 2 & 1 \ar[l]}.\]
+    For $\Sigma\S^0$ add another point $3$ and just not the edge $(2,3)$:
+    \[\xymatrix{ & 2 & \\ 0 \ar[dr]\ar[ur]& &1\ar[ul]\ar[dl] \\ & 3.&}\]
+}
+
+\rem{
+    More generally the illustrations for $C$ and $\Sigma$ are quite helpful:
+    \[\xymatrix{ & C(pt) & \\ \bullet \ar[ur] \ar@{>.<}[rr] & & \ar[ul]\bullet, } \]
+    \[\xymatrix{ & \Sigma^+(pt) & \\ \bullet \ar[dr]\ar[ur] \ar@{>.<}[rr] & & \ar[ul]\ar[dl] \bullet \\ & \Sigma^-(pt). &}\]
+}
+
+
+\ex{
+    Do note we have:
+    \[ C\Delta^{n-1} = \Delta^n ~\mathrm{for}~ n\geq -1. \]
+
+    As well as:
+    \[ \Sigma \S^{n-1} = \S^n \]
+    for the examples defined above.
+}
+
+\defn[Simplices, Spheres, Disks $\Delta^n,\S^n,\D^n$]{
+    Define $\Delta^-1 = (\emptyset,\emptyset)$, and inductively: $\Delta^n := C\Delta^{n-1}$ with $C$ the cone functor.
+    Define $\S^0 = (\{0,1\},\emptyset)$, and inductively: $\S^n := \Sigma\S^{n-1}$.
+    For $i\geq 1$ define: $\D^i = C\S^{i-1}$.
+
+    Specifically for $i=1$ denote $I:=\D^1$ as our model for the unit interval in $\dag$.
+}
+
+For vertex count $1$ there are no edges to choose, so there is only one dag representing the one point
+graph in the category $\dag$. For two vertices there is only one edge to choose, hence $2$ graphs
+with vertex count $2$, which are non-isomorphic.
+
+\prop[Number of legal incidence matrices in $\dag$]{
+    For each degree $n\geq 0$, the count of distinct edge sets per degree can be calculated as:
+    \[ \abs{ \dag_{0,n} } = 2^{{ n \choose 2 }}. \]
+    \begin{proof}
+        For a fixed degree $n\in\N$, we need to check, how many $E \subset \{0,\ldots,n-1\}\times\{0,\ldots,n-1\} $ satisfy the condition $\mathrm{top}$. In fact there is a maximal such $E$
+        representing the complete dag $\Delta^{n-1}$ on $n$ vertices, satisfying:
+        \[ (i,j) \in E(\Delta^{n-1}) \Leftrightarrow i<j. \]
+        In particular each other such graph of vertex count $n$ can be reached by deleting a uniquely determined set of edges from $\Delta^{n-1}$.
+
+        So count the edges of $\Delta^{n-1}$, since by definition they are each ordered, we can in fact
+        count two-element subsets of $\{0,\ldots,{n-1}\}$ and interpret them canonically as an ordered
+        tuple in each case. Hence the edge count is: \[\abs{E\Delta^{n-1}} = { n \choose 2 }. \]
+
+        So the count of dags is identified as the number of (arbitrary) subsets of $E\Delta^{n-1}$:
+        \[ \abs{ \dag_n }
+        = 2^{\abs{E\Delta^{n-1}}}
+        = 2^{{ n \choose 2 }}. \]
+    \end{proof}
+}
+
+\cor{
+    Do note in particular we have the recurrence relation:
+    \[
+    \abs{\dag_{0,n}} = \abs{\dag_{0,n-1}}*2^{n-1},
+    \]
+    so in particular we can interpret the formula through the
+    sum over all natural numbers up to a threshold:
+    \[
+    \abs{\dag_{0,n}} = \prod_{i=0}^{n-1} 2^i = 2^{\sum_{i=0}^{n-1} i}.
+    \]
+    \begin{proof}
+        By direct calculation with the above formula, we get:
+        \[
+        \begin{aligned}
+        \frac{\abs{\dag_{0,n}}}{\abs{\dag_{0,n-1}}}=& 2^{{ n \choose 2 } - {n-1 \choose 2}},
+        \end{aligned}
+        \]
+        and by the relation
+        \[ { n \choose 2 } = { n-1 \choose 1 } + { n-1 \choose 2 } \]
+        get
+        \[
+        \begin{aligned}
+        \frac{\abs{\dag_{0,n}}}{\abs{\dag_{0,n-1}}}
+        =& 2^{{ n-1 \choose 1 }}\\
+        =& 2^{n-1}
+        \end{aligned}
+        \]
+    \end{proof}
+}
+
+\rem{
+    In particular one can see how extremely fast that count grows in $n$, essentially as
+    $O(exp(n^2))$.
+
+    \begin{tabular}{ l | l | r | r }
+      vertex count & degree & dag count & log2 dag count\\
+      \hline
+     1 & 0 & 1 & 0 \\
+     2 & 1 & 2 & 1 \\
+     3 & 2 & 8 & 3 \\
+     4 & 3 & 64 & 6 \\
+     5 & 4 & 1024 & 10 \\
+     6 & 5 & 32768 & 15 \\
+     7 & 6 & 2097152 & 21 \\
+     8 & 7 & 268435456 & 28 \\
+     9 & 8 & 687194476736 & 36 \\
+     10 & 9 & 35184372088832 & 45 \\
+     11 & 10 & $\sim 3 * 10^{16}$ & 55 \\
+     12 & 11 & $\sim 7 * 10^{19}$ & 66 \\
+     13 & 12 & $\sim 3 * 10^{23}$ & 78 \\
+    \end{tabular}
+
+    In degree $23$ the count reaches $2^{276} \sim 10^{83},$ hence there are more
+    such dags in degree $23$ in $\dag$, than there are atoms in the observable universe.
+    At degree $14$ there are already about $10^{28}$ dags, hence more than atoms in a human body.
+}
+
+\lemma{
+    There is a functor $\oplus\colon \dag \times \dag \rightarrow \dag$,
+    given on objects and vertices as
+    \[\{0,\ldots,n-1\}\oplus \{0,\ldots,m-1\} \colon= \{0,\ldots,n-1, n,\ldots,n+m-1\}, \]
+    Given two dags $(n,E), (m,F)$, with the edge subsets:
+    \[ (i,j) \in ( E\oplus F ) \Leftrightarrow (i,j) \in E \vee (i-n,j-n) \in F. \]
+    Hence for two graph morphisms $\varphi\colon (n,E)\rightarrow (n',E'), \psi\colon (m,F)\rightarrow (m',F')$:
+    \[ (\varphi \oplus \psi)(k) \colon= \begin{cases} \varphi(k)   & 0\leq k\leq n-1 \\
+                                                     \psi(k-n)+n'  & n\leq k \leq n+m-1 \end{cases}. \]
+}
+
+\prop[Pushouts exist!]{
+    WRONG!!! 02 -> 012, 02 -> 0 doesn't have a pushout
+
+    The category of dags has (finite) pushouts!
+    %todo: joins x*y und sigma(x*y) = smash of things
+    \begin{proof}
+    Assume given two dag-morphisms $\varphi_k\colon H\rightarrow G_k$, we want to construct an
+    object $G_1\cup_HG_2$ and two morphisms $\iota_k\colon G_k \rightarrow G_1\cup_HG_2$, such
+    that for each object $Z$ and pair of morphisms $f_k\colon G_k\rightarrow Z$ such that
+    $f_1\circ\varphi_1 = f_2\circ\varphi_2$, there is a unique map $F\colon G_1\cup_HG_2 \rightarrow Z$,
+    such that $F\circ\iota_k = f_k$.
+
+    Assume $H = (\{0,\ldots,k-1\},E(H)), G_1 = (\{0,\ldots,l-1\},E(G_1)), G_2 = (\{0,\ldots,m-1\},E(G_2)),$
+    and hence $\varphi_k\colon H \rightarrow G_k$ each represented by vertex maps
+    $\varphi_1\colon \{0,\ldots,k-1\} \rightarrow \{0,\ldots,l-1\}$
+    and $\varphi_2\colon \{0,\ldots,k-1\} \rightarrow \{0,\ldots,m-1\}$ respectively.
+    \end{proof}
+}
+
+\rem{
+    At this point I am fixing a bijection
+    \[\omega_{n,m}\colon \{0,\ldots,n-1\}\times \{0,\ldots,m-1\} \rightarrow \{0,\ldots,nm-1\} \]
+    which is appropriately symmetric and associative.
+
+    Two choices of prominence are the idea of going through a 2d table either by row or by column
+    first, like:
+    \[ \omega_{n,m}(i,j) = i\cdot n + j, \]
+    or
+    \[ \bar{\omega}_{n,m}(i,j) = i + j\cdot m. \]
+    These specifically satisfy:
+    \[ \bar{\omega}_{n,m}(i,j) = \omega_{m,n}(j,i). \]
+    There are actually at least countably infinitely many such choices,
+    e.g. by choosing divisors of $n$ and $m$. Here I mainly want to choose one, sometimes use
+    the other when convenient, but calm the reader that the specific choice is quite inessential.
+
+    Occassionally I need the inverse, let us pick the one of $\omega_{n,m}$:
+    \[\omega^{-1}_{n,m}(k) = ( \floor{k/n}, k~\mathrm{mod}~n ).\]
+}
+
+\ex{
+\phantom{test}\\[2pt]
+\begin{tabular}{l}
+    { \begin{tabular}{l|r r r r r r r}
+                    $\omega_{4,7}\colon$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+                    0 & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+                    1 & 7 & 8 & 9 &10 &11 &12 &13 \\
+                    2 &14 &15 &16 &17 &18 &19 &20 \\
+                    3 &21 &22 &23 &24 &25 &26 &27 \\
+    \end{tabular} } \\
+    \phantom{test}\\[2pt]
+    {\begin{tabular}{l|r r r r r r r}
+                    $\bar\omega_{4,7}\colon$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+                    0 & 0 & 4 & 8 &12 &16 &20 &24 \\
+                    1 & 1 & 5 & 9 &13 &17 &21 &25 \\
+                    2 & 2 & 6 &10 &14 &18 &22 &26 \\
+                    3 & \phantom{0}3 & \phantom{0}7 &11 &15 &19 &23 &27 \\
+    \end{tabular} }
+\end{tabular}
+}
+
+\lemma{
+    There is a functor $\otimes\colon \dag \times \dag \rightarrow \dag$,
+    given on objects and vertices as
+    \[\{0,\ldots,n-1\}\otimes \{0,\ldots,m-1\} \colon= \{0,\ldots,nm-1\}, \]
+    Given two dags $(n,E), (m,F)$ with the edge subsets:
+    \[ (i,j) \in ( E\otimes F )
+    \Leftrightarrow ((\omega^{-1}_{n,m})(i)_1,(\omega^{-1}_{n,m})(j)_1) \in E
+    \wedge ((\omega^{-1}_{n,m})(i)_2,(\omega^{-1}_{n,m})(j)_2) \in F, \]
+    with $(x,y)_1 = x$ and $(x,y)_2 = y$ in this equivalence.
+
+    Hence for two graph morphisms $\varphi\colon (n,E)\rightarrow (n',E'), \psi\colon (m,F)\rightarrow (m',F')$:
+    \[ (\varphi \otimes \psi)(k) = \omega_{n',m'}( \varphi(\omega^{-1}_{n,m}(k)_1), \psi(\omega^{-1}_{n,m}(k)_2) ). \]
+}
+
+\lemma{
+    For each pair $n,m\in \N$ we have natural bijections:
+    \[ \sigma_{n,m}\colon \{0,\ldots, n+m-1\} \rightarrow \{0,\ldots, m+n-1 \}\]
+    and
+    \[ \theta_{n,m}\colon \{0,\ldots, nm-1\} \rightarrow \{0,\ldots, mn-1 \}.\]
+    They are given by:
+    \[
+    \sigma_{n,m}(k)\colon=
+    \begin{cases}
+    k + m     & 0 \leq k \leq n-1 \Leftrightarrow m \leq k+m \leq n+m-1 \\
+    k - n     & 0 \leq k-n \leq m-1 \Leftrightarrow n \leq k \leq n+m-1
+    \end{cases}
+    \]
+    and:
+    \[
+    \theta_{n,m}(k)\colon=
+       \floor{ k / n } + m \cdot ( k \mathrm{mod} n ).
+    \]
+    Both satisfy symmetry and associativity relations as follows:
+    Symmetries
+    \[
+    \begin{aligned}
+        \sigma_{n,m}\circ\sigma_{m,n} &= id_{\{0,\ldots,m+n-1\}} \\
+        \sigma_{m,n}\circ\sigma_{n,m} &= id_{\{0,\ldots,n+m-1\}} \\
+        \theta_{n,m}\circ\theta_{m,n} &= id_{\{0,\ldots,mn-1\}} \\
+        \theta_{m,n}\circ\theta_{n,m} &= id_{\{0,\ldots,nm-1\}} \\
+    \end{aligned}
+    \]
+    Associativity % es sollte egal sein, wie ich von lmn zu nml komme, so auch mit summe
+    \[
+    \begin{aligned}
+        \sigma_{n,m}\circ\sigma_{m,n} &= id_{\{0,\ldots,m+n-1\}} \\
+        \sigma_{m,n}\circ\sigma_{n,m} &= id_{\{0,\ldots,n+m-1\}} \\
+        \theta_{n,m}\circ\theta_{m,n} &= id_{\{0,\ldots,mn-1\}} \\
+        \theta_{m,n}\circ\theta_{n,m} &= id_{\{0,\ldots,nm-1\}} \\
+    \end{aligned}
+    \]
+}
+
+\thm{
+    The category $\dag$ is bipermutative with $\oplus$ the disjoint union and symmetry isomorphisms $\sigma_{\bullet,\bullet}$, and $\otimes$ the product with symmetry $\theta_{\bullet,\bullet}$.
+    The category has strictly sum-neutral element the empty dag and strictly product-neutral element the one-point dag.
+
+    The category has equalisers and coequalisers for each pair of morphisms, in particular finite pullbacks and pushouts.
+
+    There are combinatorial functors modelling cones $C$, as well as suspensions $\Sigma$.
+    \begin{proof}
+    \end{proof}
+}
+
+\thm{
+    There is a functor $Fl\colon \dag \rightarrow sSet$, which assigns to each dag $G=(V,E)$ as $n$-simplices
+    the graph homomorphisms from $\Delta^n$ to $G$. Faces and degeneracies are induced by the relevant
+    maps on $\Delta^n$.
+
+    The functor is strictly naturally sum preserving, that is $Fl(G\sqcup H) = Fl(G)\sqcup Fl(H)$ on objects
+    as well as morphisms, also $F(\emptyset) = \emptyset$.
+
+    The functor is strictly naturally product preserving, that is $Fl(G\times H) = Fl(G)\times Fl(H)$ on objects
+    as well as morphisms, also $F(*) = *$.
+
+    In addition the functor satisfies: \[ ( Fl\circ C ) = ( C \circ Fl ) \]
+    for an appropriately chosen cone-functor $C$ on simplicial sets,
+    as well as \[ ( Fl\circ \Sigma ) = ( \Sigma \circ Fl ) \]
+    for a similar suspension-functor $\Sigma$ on simplicial sets.
+    \begin{proof}
+    By the universal property of the product $\otimes$ on $\dag$ we get on $n$-simplices:
+    \[ \dag(\Delta^n,G\times H) = \dag(\Delta^n,G) \times \dag(\Delta^n,H), \]
+    which exactly fits the description of the categorical product on simplicial sets.
+    For sums, since $\Delta^n$ is a connected graph, on $\dag$ we get on $n$-simplices:
+    \[ \dag(\Delta^n,G\sqcup H) = \dag(\Delta^n,G) \sqcup \dag(\Delta^n,H), \]
+    which does not preclude that there might be more splittings of $G$ or $H$, but it does prove
+    the compatability with disjoint union of both categories.
+    \end{proof}
+}
+
+\chapter{Combinatorial Homotopy of DAGs}
+\section{Homotopic Maps}
+\Remi{
+    Recall we have defined $I = C\S^0$, giving the dag:
+    \xymatrix{
+        0 & 2 \ar[l] \ar[r] & 1 .
+    }
+}
+\end{document}

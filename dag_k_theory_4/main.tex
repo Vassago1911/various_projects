@@ -1,0 +1,245 @@
+% This file is part of beamerthemepureminimalistic.
+
+% If problems/bugs are found or enhancements are desired, please contact
+% me over: https://github.com/kai-tub/latex-beamer-pure-minimalistic
+
+\documentclass[a4paper]{book}
+\include{version}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{Remi}[thm]{Reminder}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{nonex}[thm]{{\bf NON}-Example}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{Exercise}[thm]{Exercise}
+\newtheorem{Code}[thm]{Pseudocode}
+\usepackage{datetime2}
+\usepackage{graphicx}
+\usepackage{svg}
+% \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
+\usepackage{svg-extract}
+\usepackage{hyperref}
+\usepackage{inconsolata}
+
+\usepackage{tcolorbox}
+
+\usepackage[all]{xy}
+\usepackage{xypic}
+\usepackage{xcolor}
+
+\definecolor{light}{RGB}{0,100,43}
+\definecolor{dark}{RGB}{130,0,100}
+\definecolor{exercise}{RGB}{220,200,255}
+\definecolor{textcolor}{RGB}{0, 150, 128}
+\definecolor{title}{RGB}{150, 0, 128}
+\definecolor{footercolor}{RGB}{0, 128, 64}
+\definecolor{code}{RGB}{240,220,160}
+\definecolor{codebg}{RGB}{50,50,50}
+\definecolor{mathbg}{RGB}{0,10,30}
+\definecolor{mathtext}{RGB}{220,220,250}
+\definecolor{bg}{RGB}{32, 0, 16}
+
+\def\exercise#1{\color{light}{\h\Exercise{\color{exercise}\scshape #1}}\color{textcolor}}
+\def\code#1#2{\color{dark}{\h\Code{\h}\\[.5em]%
+\color{mathtext}#1
+\begin{tcolorbox}[colback=codebg]%
+\color{code}%
+\texttt{#2}%
+\color{textcolor}%
+\end{tcolorbox}\color{textcolor}}}
+
+\def\backtick{`}
+\def\curtime{\DTMdate{2023-09-21} ~\DTMtime{01:42:17}\DTMdisplayzone{-5}{00}}
+\def\light#1{{\color{light}#1}}
+\def\dark#1{{\color{dark}#1}}
+\def\h{\hspace{1em}}
+
+\def\signature{\href{mailto:marc@lange-data.org}{Dr. Marc Lange, marc@lange-data.org}}
+\def\mailsignature{\href{mailto:marc@lange-data.org}{marc@lange-data.org}}
+
+\def\abs#1{\left| #1 \right| }
+\def\floor#1{\lfloor #1 \rfloor }
+
+\newcommand{\lthree}{<\hspace{-5.2pt}3}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\DAG}{\mathcal{DAG}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\C}{\mathcal{C} }
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\LL}{\mathcal{L}^1(\Z,\Z)}
+\newcommand{\Set}{\mathrm{Set}}
+
+\renewcommand{\dag}{\mathrm{emb}\mathcal{DAG}}
+
+
+\newcommand{\s}{Set^{\phantom{\leq}}_{\phantom{+}}}
+\newcommand{\spp}{Set=fSet}
+\newcommand{\smp}{Set^{\leq}_{\phantom{+}}}
+\newcommand{\spm}{Set^{\phantom{\leq}}_{+}}
+\newcommand{\smm}{Set^{\leq}_{+}}
+\newcommand{\spmpm}{Set^{\pm}_{\pm}}
+
+\newcommand{\App}{A}
+\newcommand{\Amp}{A^{\leq}_{\phantom{+}}}
+\newcommand{\Apm}{A^{\phantom{\leq}}_{+}}
+\newcommand{\Amm}{A^{\leq}_{+}}
+
+\begin{document}
+\chapter{The skeletal $2$-category of dags}
+\section{The fundamental $2$-category}
+In the spirit of module categories typically appearing in $K$-theory constructions, define
+a $1$-category of directed acyclic graphs with very similar properties. Notice that a morphism
+of directed acyclic graphs which is fixed on vertices can either exist or not, but there is
+no freedom involved to allow two morphisms between that same source and target graph. The resulting
+category is hence a literal $1$-category.
+\defn{
+    The skeletal category of finite embedded directed acyclic graphs, denoted $dag$ has
+    as objects the natural numbers.
+
+    The morphisms from $n$ to $n$ are directed acyclic graphs on the vertex set $\{1,\ldots,n\}$ which
+    respect $\leq_\N$, i.e. an edge in a directed acyclic graph is only ever non-decreasing
+    with respect to the natural order of natural numbers. Interpreted differently a morphism
+    in $dag$ is a square matrix
+    \[ A = (A_{ij}) 1\leq i,j \leq n, \]
+    such that $A_{ii}=1$ and $A_{ij}=1 \Rightarrow 1\leq i\leq j\leq n$.
+    I.e. it is upper triangular, and each diagonal element is set to $1$.
+
+    Set composition to be $(B\cdot A)_{ij} = min(max(k|B_{ik}A_{kj}))$. I.e. set each entry to
+    be defined as: If there is some middle $k$ connecting $i$ in $B$ to $k$, and then there
+    is a $j$, such that $k$ is connected in $A$ to $j$, then $i,j$ is an edge in $B\cdot A$.
+}
+
+\prop{
+    This is in fact a (small) category.
+    \begin{proof}
+    The existence of identities can be seen by setting $id_n$ to be the matrix with
+    diagonal elements $1$ and rest $0$, then follows $A\cdot id = id \cdot A = A$ for any
+    $A$ and $id$ of compatible degree.
+
+    To check that $B\cdot A$ is well-defined, check if $B\cdot A$ in fact respects the
+    $\leq_\N$ relation still. Given an edge $(i,j)\in B\cdot A$, there exists a vertex
+    $k$, such that $(i,k)\in B$ and $(k,j)\in A$. Because both $A$ and $B$ are $\leq_\N$-compatibly
+    directed, find $i\leq k$ and $k\leq j$, hence $i\leq j$, so $(i,j)$ is a legal edge
+    in $\leq_\N$.
+
+    For associativity note that the triple product $C\cdot B\cdot A$ has the natural "unbracketed"
+    interpretation like above. It is a dag on the same vertex set as the three other graphs. It has
+    edges the pairs of vertices $x,y$ such that $x$ has an edge to another vertex via $C$, that
+    vertex has one to another in $B$ and finally that one has one via $A$ to $y$. There is nothing
+    ineherently prioritised about the pairings, so it is associative.
+    \end{proof}
+}
+
+\ex{
+    Note in particular that multiplying a dag with itself $A\cdot A\cdot \ldots \cdot A$ when
+    interpreted with $1$'s on the diagonal as above, eventually yields the transitive closure of $A$
+    by the above reasoning.
+}
+
+\rem{
+    Interpreting dag's as irreflexive, i.e. setting the diagonal to $0$'s should provide a descending
+    filtration on $A$ until no edge remains. We have not investigated that route further so far.
+}
+
+\lem{
+    For each pair of natural numbers $n,m\in\N$ consider the map:
+    \[ \sigma_{n,m}\colon \lbrack n \rbrack \sqcup \lbrack m \rbrack \rightarrow \lbrack n+m \rbrack \]
+    with $\sigma(k)=k$ for $k\in \lbrack n \rbrack$ and $\sigma(k)=k+n$ for $k\lbrack m \rbrack$.
+    Then it has an inverse monotonic map of total orders with:
+    \[\sigma^{-1}_{n,m}(k) = \begin{cases} i_n(k) & k\leq n\\ i_m(k-n)& n+1\leq k, \end{cases} \]
+    where $i_?$ stands for the inclusion of the respective summand in the disjoint union.
+    \begin{proof}
+    One easily convinces themselves that $\sigma_{n,m}\circ \sigma^{-1}_{n,m} = id$ and
+    $\sigma^{-1}_{n,m} \circ \sigma_{n,m} = id$.
+    \end{proof}
+}
+
+\rem{
+    The analogous product structure is far more interesting.
+}
+
+\prop{
+    For each pair of natural numbers $n,m\in\N$ consider the map:
+    \[ \omega_{n,m}\colon \lbrack n \rbrack \times \lbrack m \rbrack \rightarrow \lbrack nm \rbrack \]
+    with $\omega_{n,m}(k,l) = (k-1)m+l$.
+    It has inverse (not monotonic, since $\lbrack nm \rbrack$ has a fixed natural total order, the product
+    has many to choose from):
+    \[ \omega^{-1}_{n,m}(N) = ( N // m + 1, N mod m ), \]
+    where $N // m$ is the integer part of the division of $N$ by $m$, e.g. $\lfloor N/m \rfloor$ provides
+    a formula, and $N mod m$ has to be interpreted as the usual least natural number that can represent
+    an element $mod m$, apart from $0$ which we set as $m$: $lm mod m = m$.
+    \begin{proof}
+    Note that the formulas are arranged just so that they invert each other, so there is not much to gain
+    by displaying the actual calculation, which is quite short. The most insightful thing about them are the
+    edge cases, convincing oneself that $0$ is never accidentally produced, $(1,1)$ goes to $1$
+    and that $nm$ is actually hit.
+
+    However, do note that both maps have
+    the virtue of displaying their monotonicity in the formular: For $(a,b)\leq(c,d)$, i.e. $a\leq c$ and $b\leq d$,
+    one can easily see $\omega(a,b)\leq \omega(c,d)$. Also the first component of the inverse map is
+    (non-strictly) monotonically increasing, the second component, however, is not monotonic for $n\geq 2$, because
+    it has to "fall" after each $m$-multiple in $\lbrack nm \rbrack$.
+    \end{proof}
+}
+
+\cor{
+    There are symmetries $\tau_\sigma$ and $\tau_\omega$ representing the $\sqcup$ symmetry and $\times$ symmetry on finite sets, as follows:
+    \[\xymatrix{ \lbrack n \rbrack \sqcup \lbrack m \rbrack \ar[r]^\omega \ar[d]^{\tau_\sqcup} & \lbrack n+m \rbrack \ar[d]^{\tau_\sigma} \\
+                 \lbrack m \rbrack \sqcup \lbrack n \rbrack \ar[r]^\omega & \lbrack m+n, \rbrack
+    }\]
+    and
+    \[\xymatrix{ \lbrack n \rbrack \times \lbrack m \rbrack \ar[r]^\omega \ar[d]^{\tau_\times} & \lbrack nm \rbrack \ar[d]^{\tau_\omega} \\
+                 \lbrack m \rbrack \times \lbrack n \rbrack \ar[r]^\omega & \lbrack mn \rbrack.
+    }\]
+    They each satisfy $\tau_\sigma^2=id$ and $\tau_\omega^2=id$, more explicitly for $\tau_\omega$, the two maps so defined are inverses of
+    each other $\lbrack nm \rbrack \rightarrow \lbrack mn \rbrack \rightarrow \lbrack nm\rbrack$, where the objects are suggestively
+    denoted to imply which $\tau_\omega$ has to be used. Similarly for $\tau_\sigma$.
+    \begin{proof}
+    Given the families $(\sigma_{n,m})$ and $(\omega_{n,m})$ as above
+    \end{proof}
+}
+
+
+\prop{
+    For $\lbrack n \rbrack = \{1,\ldots,n\}$ with $\lbrack 0 \rbrack = \emptyset$, consider the following
+    bijections:
+    The sum-bijection for each pair $n,m\in \N$:
+    \[ \sigma_{n,m}\colon \lbrack n \rbrack \sqcup \lbrack m \rbrack \rightarrow \lbrack n+m \rbrack \]
+    with $\sigma(k)=k$ for $k\in \lbrack n \rbrack$ and $\sigma(k)=k+n$ for $k\lbrack m \rbrack$.
+    The product-bijection for each pair $n,m\in\N$:
+    \[ \omega_{n,m}\colon \lbrack n \rbrack \times \lbrack m \rbrack \rightarrow \lbrack nm \rbrack \]
+    with $\omega_{n,m}(k,l) = (k-1)m+l$.
+    Both are monotonic bijections with respect to the natural orders on sum, product and the
+    relevant subsets of natural numbers.
+
+    They satisfy $\forall k,l,m,n\in \N$:
+    \begin{enumerate}
+    \item  \[\xymatrix{ \lbrack k \rbrack \sqcup \lbrack l \rbrack \sqcup \lbrack m \rbrack  \ar[d]^{\sigma_{k,l}\sqcup id_m}\ar[r]^{id_k\sqcup \sigma_{l,m}}
+                      & \lbrack k \rbrack \sqcup \lbrack l+m \rbrack \ar[d]^{\sigma_{k,l+m}} \\
+                        \lbrack k+l \rbrack \sqcup \lbrack m \rbrack \ar[r]^{\sigma_{k+l,m}}
+                      & \lbrack k+l+m, \rbrack }\]
+                      i.e. the family $\sigma_{\bullet,\bullet}$ induces a unique way to identify finite sums of
+                      finite total orders as one finite total order, independent of how the summands are associated.
+
+    \end{enumerate}
+
+    then? (relations listen, bip folgern fuer dag, H ausrechnen, fertig)
+}
+\section{The fundamental bipermutative two element category}
+\section{DAGs are a module category}
+\end{document}
