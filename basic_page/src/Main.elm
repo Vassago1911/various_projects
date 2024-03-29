@@ -87,27 +87,43 @@ paragraphFont =
 
 main_svg : Html Msg
 main_svg =
-    svg [ SvgAttributes.viewBox "0 0 2048 2048" ]
-        [ rect
-            [ SvgAttributes.x "0"
-            , SvgAttributes.y "0"
-            , SvgAttributes.width "2048"
-            , SvgAttributes.height "2048"
-            , SvgAttributes.fill "#110"
+    div [ css [ textAlign right ] ]
+        [ pan_btn [] [ Html.Styled.text "🔼" ]
+        , pan_btn [] [ Html.Styled.text "🔽" ]
+        , pan_btn [] [ Html.Styled.text "⬅️" ]
+        , pan_btn [] [ Html.Styled.text "➡️" ]
+        , pan_btn [] [ Html.Styled.text "➕" ]
+        , pan_btn [] [ Html.Styled.text "➖" ]
+        , svg [ SvgAttributes.viewBox "0 0 2048 2048" ]
+            [ rect
+                [ SvgAttributes.x "0"
+                , SvgAttributes.y "0"
+                , SvgAttributes.width "2048"
+                , SvgAttributes.height "2048"
+                , SvgAttributes.fill "#110"
+                ]
+                []
+            , path
+                [ SvgAttributes.fill "#100"
+                , SvgAttributes.strokeWidth "0"
+                , SvgAttributes.d "M 2048,0 l -2048,2048 L 0,0 z"
+                ]
+                []
+            , path
+                [ SvgAttributes.fill "#000"
+                , SvgAttributes.strokeWidth "0"
+                , SvgAttributes.d "M 2048,0 l -2048,2048 L 2048,2048 z"
+                ]
+                []
+            , rect
+                [ SvgAttributes.x "1000"
+                , SvgAttributes.y "1000"
+                , SvgAttributes.width "48"
+                , SvgAttributes.height "48"
+                , SvgAttributes.fill "#303"
+                ]
+                []
             ]
-            []
-        , path
-            [ SvgAttributes.fill "#100"
-            , SvgAttributes.strokeWidth "0"
-            , SvgAttributes.d "M 2048,0 l -2048,2048 L 0,0 z"
-            ]
-            []
-        , path
-            [ SvgAttributes.fill "#000"
-            , SvgAttributes.strokeWidth "0"
-            , SvgAttributes.d "M 2048,0 l -2048,2048 L 2048,2048 z"
-            ]
-            []
         ]
 
 
@@ -193,16 +209,7 @@ view _ =
                 , overflowY hidden
                 ]
             ]
-            [ div [ css [ textAlign right ] ]
-                [ pan_btn [] [ Html.Styled.text "🔼" ]
-                , pan_btn [] [ Html.Styled.text "🔽" ]
-                , pan_btn [] [ Html.Styled.text "⬅️" ]
-                , pan_btn [] [ Html.Styled.text "➡️" ]
-                , pan_btn [] [ Html.Styled.text "➕" ]
-                , pan_btn [] [ Html.Styled.text "➖" ]
-                , main_svg
-                ]
-            ]
+            [ main_svg ]
         , nav
             [ css
                 [ property "grid-area" "noti"
