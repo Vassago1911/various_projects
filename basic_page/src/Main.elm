@@ -24,7 +24,7 @@ theme :
 theme =
     { bg_color = rgb 20 10 10
     , navbar_bg = rgb 0 0 0
-    , button_bg_color = rgb 0 0 0
+    , button_bg_color = rgb 50 70 70
     , primary = hex "201"
     , secondary = rgb 250 240 230
     , font_dark = rgb 15 10 10
@@ -53,6 +53,26 @@ btn =
         ]
 
 
+{-| A reusable button which has some styles pre-applied to it.
+-}
+pan_btn : List (Html.Styled.Attribute msg) -> List (Html msg) -> Html msg
+pan_btn =
+    Html.Styled.styled button
+        [ margin (px 1)
+        , color theme.font_light
+        , backgroundColor (rgb 10 10 10)
+        , border3 (px 0) solid (rgb 32 32 32)
+        , borderRadius (px 64)
+        , hover
+            [ fontWeight bold
+            , color theme.font_hover_light
+            , backgroundColor (rgba 96 16 32 0.75)
+
+            --, textDecoration underline
+            ]
+        ]
+
+
 {-| A reusable style. Css.batch combines multiple styles into one, much
 like mixins in CSS preprocessors.
 -}
@@ -67,7 +87,28 @@ paragraphFont =
 
 main_svg : Html Msg
 main_svg =
-    svg [] []
+    svg [ SvgAttributes.viewBox "0 0 2048 2048" ]
+        [ rect
+            [ SvgAttributes.x "0"
+            , SvgAttributes.y "0"
+            , SvgAttributes.width "2048"
+            , SvgAttributes.height "2048"
+            , SvgAttributes.fill "#110"
+            ]
+            []
+        , path
+            [ SvgAttributes.fill "#100"
+            , SvgAttributes.strokeWidth "0"
+            , SvgAttributes.d "M 2048,0 l -2048,2048 L 0,0 z"
+            ]
+            []
+        , path
+            [ SvgAttributes.fill "#000"
+            , SvgAttributes.strokeWidth "0"
+            , SvgAttributes.d "M 2048,0 l -2048,2048 L 2048,2048 z"
+            ]
+            []
+        ]
 
 
 view : Model -> Html Msg
@@ -78,7 +119,7 @@ view _ =
             , property "grid-gap" "8px"
             , property "grid-template-areas"
                 """
-        "logo head -"
+        "- head logo"
         "navl main noti"
         "foot foot help"
         """
@@ -91,13 +132,21 @@ view _ =
         , div
             [ css
                 [ property "grid-area" "logo"
-
-                {- , border3 (px 2) solid (rgba 142 96 128 0.3)
-                   , borderRadius (px 8)
-                -}
                 ]
+            , Html.Styled.Attributes.title "Don't disturb the squirrel 🐿️ 💭"
             ]
-            [ img [ src "desk_squirrel.svg", css [ borderRadius (px 512), hover [ backgroundColor (rgb 32 64 32) ], width (vw 6), height (vh 6) ] ] [] ]
+            [ img
+                [ src "desk_squirrel.svg"
+                , css
+                    [ borderRadius (px 512)
+                    , hover [ backgroundColor (rgb 32 64 32) ]
+                    , width (vw 5)
+                    , height (vh 5)
+                    , transform (scaleX 1)
+                    ]
+                ]
+                []
+            ]
         , header
             [ css
                 [ property "grid-area" "head"
@@ -115,7 +164,7 @@ view _ =
             , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "💩" ]
             , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "🤦" ]
             , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "🔬" ]
-            , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "🏛️" ]
+            , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "🏴\u{200D}☠️" ]
             , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "🌋" ]
             , btn [ css [ fontSize (px 32) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "🃏" ]
             ]
@@ -125,24 +174,35 @@ view _ =
                 ]
             ]
             [ btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐿️" ]
-            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐿️" ]
-            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐿️" ]
-            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐿️" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐘" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐳" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🦫" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🦜" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🦆" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🦭" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐇" ]
+            , btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🐀" ]
             ]
         , main_
             [ css
                 [ property "grid-area" "main"
-                , border3 (px 2) solid (rgba 96 96 16 0.2)
+                , border3 (px 1) solid (rgba 32 32 0 0.4)
                 , borderRadius (px 4)
                 , margin (px 16)
-                , color theme.font_light
                 , overflowX hidden
-                , overflowY auto
-                , property "scrollbar-width" "thin"
-                , property "scrollbar-color" "#111 #101"
+                , overflowY hidden
                 ]
             ]
-            [ main_svg ]
+            [ div [ css [ textAlign right ] ]
+                [ pan_btn [] [ Html.Styled.text "🔼" ]
+                , pan_btn [] [ Html.Styled.text "🔽" ]
+                , pan_btn [] [ Html.Styled.text "⬅️" ]
+                , pan_btn [] [ Html.Styled.text "➡️" ]
+                , pan_btn [] [ Html.Styled.text "➕" ]
+                , pan_btn [] [ Html.Styled.text "➖" ]
+                , main_svg
+                ]
+            ]
         , nav
             [ css
                 [ property "grid-area" "noti"
@@ -152,7 +212,13 @@ view _ =
                 , color theme.font_light
                 ]
             ]
-            [ Html.Styled.text "noti" ]
+            [ btn [ css [ fontSize (px 12) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🥜" ]
+            , btn [ css [ fontSize (px 12) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🥥" ]
+            , btn [ css [ fontSize (px 12) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🌰" ]
+            , btn [ css [ fontSize (px 12) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🍩" ]
+            , btn [ css [ fontSize (px 12) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🔩" ]
+            , btn [ css [ fontSize (px 12) ], Html.Styled.Attributes.title "click here" ] [ Html.Styled.text "🍉" ]
+            ]
         , footer
             [ css
                 [ property "grid-area" "foot"
