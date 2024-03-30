@@ -1,10 +1,12 @@
 module Main exposing (main)
 
 import Browser exposing (Document, document)
+import Browser.Events exposing (onKeyDown)
 import Css exposing (..)
 import Css.Global exposing (body, global, html)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, src, title)
+import Json.Decode as Decode
 import Svg.Styled exposing (..)
 import Svg.Styled.Attributes as SvgAttributes
 
@@ -85,8 +87,24 @@ paragraphFont =
         ]
 
 
-main_svg : Html Msg
-main_svg =
+main_svg : Model -> Html Msg
+main_svg model =
+    let
+        modelvb =
+            model.svg_coods
+
+        str_vb =
+            List.map String.fromInt
+                [ modelvb.left
+                , modelvb.top
+                , modelvb.width
+                , modelvb.height
+                ]
+                |> String.join " "
+
+        vb =
+            SvgAttributes.viewBox str_vb
+    in
     div [ css [ textAlign right ] ]
         [ pan_btn [] [ Html.Styled.text "🔼" ]
         , pan_btn [] [ Html.Styled.text "🔽" ]
@@ -94,7 +112,7 @@ main_svg =
         , pan_btn [] [ Html.Styled.text "➡️" ]
         , pan_btn [] [ Html.Styled.text "➕" ]
         , pan_btn [] [ Html.Styled.text "➖" ]
-        , svg [ SvgAttributes.viewBox "0 0 2048 2048" ]
+        , svg [ vb ]
             [ rect
                 [ SvgAttributes.x "0"
                 , SvgAttributes.y "0"
@@ -106,13 +124,13 @@ main_svg =
             , path
                 [ SvgAttributes.fill "#100"
                 , SvgAttributes.strokeWidth "0"
-                , SvgAttributes.d "M 2048,0 l -2048,2048 L 0,0 z"
+                , SvgAttributes.d "M 6144,6144 l -12288,0 l 0,-12288 z"
                 ]
                 []
             , path
                 [ SvgAttributes.fill "#000"
                 , SvgAttributes.strokeWidth "0"
-                , SvgAttributes.d "M 2048,0 l -2048,2048 L 2048,2048 z"
+                , SvgAttributes.d "M 6144,6144 l 0,-12288 l -12288,0 z"
                 ]
                 []
             , rect
@@ -128,7 +146,7 @@ main_svg =
 
 
 view : Model -> Html Msg
-view _ =
+view model =
     div
         [ Html.Styled.Attributes.css
             [ property "display" "grid"
@@ -209,7 +227,7 @@ view _ =
                 , overflowY hidden
                 ]
             ]
-            [ main_svg ]
+            [ main_svg model ]
         , nav
             [ css
                 [ property "grid-area" "noti"
@@ -232,7 +250,10 @@ view _ =
                 , textAlign left
                 ]
             ]
-            [ btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "✉️" ] ]
+            [ btn [ css [ fontSize (px 16) ], Html.Styled.Attributes.title "click_here" ] [ Html.Styled.text "✉️" ]
+
+            --, btn                [ css [ fontSize (px 12) ] ]                [Html.Styled.text ("recent keys: " ++ String.concat model.keys)                ]
+            ]
         , nav
             [ css
                 [ property "grid-area" "help"
@@ -250,23 +271,117 @@ main =
         { view = \m -> { title = "🔮Harbinger💡", body = List.map Html.Styled.toUnstyled [ view m ] }
         , update = update
         , init = \_ -> ( initialModel, Cmd.none )
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         }
+
+
+keyDecoder : Decode.Decoder String
+keyDecoder =
+    Decode.map (\x -> String.toLower x ++ " ") (Decode.field "key" Decode.string)
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch [ onKeyDown (Decode.map AddKey keyDecoder) ]
+
+
+change_viewbox : String -> Model -> Model
+change_viewbox ctrl model =
+    let
+        vb =
+            model.svg_coods
+
+        ccst =
+            32
+
+        vb1 =
+            case ctrl of
+                "<dn> " ->
+                    { vb | top = vb.top + ccst }
+
+                "<up> " ->
+                    { vb | top = vb.top - ccst }
+
+                "<lf> " ->
+                    { vb | left = vb.left - ccst }
+
+                "<rt> " ->
+                    { vb | left = vb.left + ccst }
+
+                "<- > " ->
+                    { vb | width = min 6144 (vb.width + ccst), height = min 6144 (vb.height + ccst) }
+
+                "<+ > " ->
+                    { vb | width = max 128 (vb.width - ccst), height = max 128 (vb.height - ccst) }
+
+                "<0 > " ->
+                    { left = 0, width = 2048, top = 0, height = 2048 }
+
+                _ ->
+                    vb
+    in
+    { model | svg_coods = vb1 }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        AddKey value ->
+            let
+                t =
+                    String.toLower value
+
+                mdl =
+                    case t of
+                        "arrowdown " ->
+                            change_viewbox "<dn> " model
+
+                        "arrowleft " ->
+                            change_viewbox "<lf> " model
+
+                        "arrowup " ->
+                            change_viewbox "<up> " model
+
+                        "arrowright " ->
+                            change_viewbox "<rt> " model
+
+                        "+ " ->
+                            change_viewbox "<+ > " model
+
+                        "- " ->
+                            change_viewbox "<- > " model
+
+                        "0 " ->
+                            change_viewbox "<0 > " model
+
+                        _ ->
+                            model
+
+                newkeys =
+                    List.take 7 (t :: mdl.keys)
+            in
+            ( { model | keys = newkeys, svg_coods = mdl.svg_coods }, Cmd.none )
+
+        _ ->
+            ( model, Cmd.none )
 
 
 type Msg
     = DoSomething
+    | AddKey String
 
 
 type alias Model =
-    ()
+    { keys : List String
+    , svg_coods :
+        { left : Int
+        , width : Int
+        , top : Int
+        , height : Int
+        }
+    }
 
 
 initialModel : Model
 initialModel =
-    ()
+    { keys = [], svg_coods = { left = 0, width = 2048, top = 0, height = 2048 } }
