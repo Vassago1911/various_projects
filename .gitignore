@@ -7,3 +7,4 @@
 *.csv
 *elm-stuff*
 *applike_template*
+*.db*

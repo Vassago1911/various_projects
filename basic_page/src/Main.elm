@@ -6,6 +6,7 @@ import Css exposing (..)
 import Css.Global exposing (body, global, html)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, src, title)
+import Http
 import Json.Decode as Decode
 import Svg.Styled exposing (..)
 import Svg.Styled.Attributes as SvgAttributes
@@ -323,6 +324,11 @@ change_viewbox ctrl model =
     { model | svg_coods = vb1 }
 
 
+load_something : Model -> Model
+load_something model =
+    model
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -354,6 +360,9 @@ update msg model =
                         "0 " ->
                             change_viewbox "<0 > " model
 
+                        "r " ->
+                            load_something model
+
                         _ ->
                             model
 
@@ -379,9 +388,10 @@ type alias Model =
         , top : Int
         , height : Int
         }
+    , txt : String
     }
 
 
 initialModel : Model
 initialModel =
-    { keys = [], svg_coods = { left = 0, width = 2048, top = 0, height = 2048 } }
+    { keys = [], svg_coods = { left = 0, width = 2048, top = 0, height = 2048 }, txt = "" }
