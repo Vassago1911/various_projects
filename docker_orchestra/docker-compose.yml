@@ -1,0 +1,28 @@
+version: "2.8"
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/data
+
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
+  data:

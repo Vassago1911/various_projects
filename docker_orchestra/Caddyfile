@@ -1,0 +1,8 @@
+localhost, 127.0.0.1 {
+    root * /srv
+    file_server
+}
+
+:12345 {
+    reverse_proxy :9443
+}

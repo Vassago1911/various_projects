@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+    alp1:
+        image: alpine:latest
+        stdin_open: true # run -i
+        tty: true # run -t
+        restart: no
+        command:
+          - "ash"
+        networks:
+          - alps
+    alp2:
+        image: alpine:latest
+        stdin_open: true # run -i
+        tty: true # run -t
+        restart: no
+        command:
+          - "ash"
+        networks:
+          - alps
+    alp3:
+        image: alpine:latest
+        stdin_open: true # run -i
+        tty: true # run -t
+        restart: no
+        command:
+          - "ash"
+        networks:
+          - zyzx
+    alp4:
+        image: alpine:latest
+        stdin_open: true # run -i
+        tty: true # run -t
+        restart: no
+        command:
+          - "ash"
+        networks:
+          - alps
+          - zyzx
+
+networks:
+  alps:
+  zyzx:
