@@ -125,15 +125,11 @@
 \prop{
     This is a fibre bundle for $k=\R,\C,\H$, with fibre $F = \S(k)=\S^0,\S^1,\S^3$.
     \begin{proof}
-    Consider the tiny case $m_\R\colon \S(\R\times\R)\rightarrow \S^\R$, specifically
-    its fibre: $m_\R^{-1}(0\in\R) = \{~(a,b)\in\S(\R\times\R)~|~|a|^2+|b|^2=1~\wedge~ab^{-1}=0~\}$.
-    Find $m_\R^{-1}(0) = \{~(a,b)\in\S(\R\times\R)~|~a=0 \wedge |b|=1~\}=\{0\}\times \{\pm1\}\cong\S^0$.
-    Similarly for $t\neq0$ in $\R$ consider: $ab^{-1} = t \Leftrightarrow a = tb \Leftrightarrow b = at^{-1}$.
-    It follows $m_\R^{-1}t = \{~ (\pm1,\pm t^{-1}) ~\} \cong \S^0$ for each target in $\R$. Finally consider
-    $m_\R^{-1}\infty = \{~(a,b)\in\S(\R\times\R)~|~|a|^2+|b|^2=1~\wedge~ab^{-1}=\infty~\} = \{~(a,0)~\S(\R\times 0) \} \cong \S^0$.
-
-    Similarly find that $m_k^{-1}z \cong \S(k)$ by considering:
-    \[ m_k^{-1}z = \{~(a,b)~|~|a|^2+|b|^2=1\wedge ab^{-1}=z~\} = \{~(zu,u^{-1})~|~u\in \S(k)~\}.\]
+    Consider first the case $k=\R$.
+    The case $k=\R$ can be identified as $\Z/2 \rightarrow \S^1 \rightarrow \S^1$, where the first circle
+    is a unit sphere in $\R^2$ and the second circle is the one-point-compactification of $k=\R$.
+    Let $t \in \R^+$ with $|t|\leq 1$, it defines a subset of $\S(\R\times\R)$ with 
+    \[U_t:=\{~z\in D\R~|~|z|^2+|t|^2=1~\}=\{~z\in D\R~|~|z|=\sqrt{1-|t|^2}~\}.\]
     \end{proof}
 }
 
