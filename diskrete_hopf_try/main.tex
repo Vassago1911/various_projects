@@ -116,12 +116,19 @@
     Thus consider the map:
     \[ \begin{aligned}
     m_k &\colon & \S^{2n-1} = \S(k\times k) &\rightarrow & \S^k \\
-         &       & a,b                        &\mapsto     & a\cdot b^{-1}.
+         &       & a,b                        &\mapsto     & a\cdot b^{-1},
     \end{aligned} \]
+    where $(\bullet) \cdot b^{-1}$ has to be defined as $\infty$ for $b=0$, (note that
+    this implies $|a|=1$, so $a\neq 0$.)
 }
 
 \prop{
-    This is a fibre bundle for $k=\R,\C,\H$.
+    This is a fibre bundle for $k=\R,\C,\H$, with fibre $F = \S(k)=\S^0,\S^1,\S^3$.
+    \begin{proof}
+    Consider the tiny case $m_\R\colon \S(\R\times\R)\rightarrow \S^\R$, specifically
+    its fibre: $m_\R^{-1}(0\in\R) = \{~(a,b)\in\S(\R\times\R)~|~|a|^2+|b|^2=1~\wedge~ab^{-1}=0~\}$.
+    Find $m_\R^{-1}(0) = \{~(a,b)\in\S(\R\times\R)~|~|a|^2+|b|^2=1~\wedge~(a=0 \vee b=\infty)~\}$
+    \end{proof}
 }
 
 \end{document}
