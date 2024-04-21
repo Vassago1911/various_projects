@@ -1,0 +1,122 @@
+% This file is part of beamerthemepureminimalistic.
+
+% If problems/bugs are found or enhancements are desired, please contact
+% me over: https://github.com/kai-tub/latex-beamer-pure-minimalistic
+
+\documentclass[a4paper]{book}
+\include{version}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{Remi}[thm]{Reminder}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{nonex}[thm]{{\bf NON}-Example}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{Exercise}[thm]{Exercise}
+\newtheorem{Code}[thm]{Pseudocode}
+\usepackage{datetime2}
+\usepackage{graphicx}
+\usepackage{svg}
+% \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
+\usepackage{svg-extract}
+\usepackage{hyperref}
+\usepackage{inconsolata}
+
+\usepackage{tcolorbox}
+
+\usepackage[all]{xy}
+\usepackage{xypic}
+\usepackage{xcolor}
+
+\definecolor{light}{RGB}{0,100,43}
+\definecolor{dark}{RGB}{130,0,100}
+\definecolor{exercise}{RGB}{220,200,255}
+\definecolor{textcolor}{RGB}{0, 150, 128}
+\definecolor{title}{RGB}{150, 0, 128}
+\definecolor{footercolor}{RGB}{0, 128, 64}
+\definecolor{code}{RGB}{240,220,160}
+\definecolor{codebg}{RGB}{50,50,50}
+\definecolor{mathbg}{RGB}{0,10,30}
+\definecolor{mathtext}{RGB}{220,220,250}
+\definecolor{bg}{RGB}{32, 0, 16}
+
+\def\exercise#1{\color{light}{\h\Exercise{\color{exercise}\scshape #1}}\color{textcolor}}
+\def\code#1#2{\color{dark}{\h\Code{\h}\\[.5em]%
+\color{mathtext}#1
+\begin{tcolorbox}[colback=codebg]%
+\color{code}%
+\texttt{#2}%
+\color{textcolor}%
+\end{tcolorbox}\color{textcolor}}}
+
+\def\backtick{`}
+\def\curtime{\DTMdate{2023-09-21} ~\DTMtime{01:42:17}\DTMdisplayzone{-5}{00}}
+\def\light#1{{\color{light}#1}}
+\def\dark#1{{\color{dark}#1}}
+\def\h{\hspace{1em}}
+
+\def\signature{\href{mailto:marc@lange-data.org}{Dr. Marc Lange, marc@lange-data.org}}
+\def\mailsignature{\href{mailto:marc@lange-data.org}{marc@lange-data.org}}
+
+\def\abs#1{\left| #1 \right| }
+\def\floor#1{\lfloor #1 \rfloor }
+
+\newcommand{\lthree}{<\hspace{-5.2pt}3}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\DAG}{\mathcal{DAG}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\H}{\mathbb{H}}
+\renewcommand{\k}{\mathbb{k}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\LL}{\mathcal{L}^1(\Z,\Z)}
+\newcommand{\Set}{\mathrm{Set}}
+
+\renewcommand{\dag}{\mathrm{emb}\mathcal{DAG}}
+
+
+\newcommand{\s}{Set^{\phantom{\leq}}_{\phantom{+}}}
+\newcommand{\spp}{Set=fSet}
+\newcommand{\smp}{Set^{\leq}_{\phantom{+}}}
+\newcommand{\spm}{Set^{\phantom{\leq}}_{+}}
+\newcommand{\smm}{Set^{\leq}_{+}}
+\newcommand{\spmpm}{Set^{\pm}_{\pm}}
+
+\newcommand{\App}{A}
+\newcommand{\Amp}{A^{\leq}_{\phantom{+}}}
+\newcommand{\Apm}{A^{\phantom{\leq}}_{+}}
+\newcommand{\Amm}{A^{\leq}_{+}}
+
+\begin{document}
+\chapter{2024-04-21 -- Cyclotomic Polynomials}
+\section{Explicit construction}
+For the cyclotomic polynomials there is always
+a coefficient which is exactly $1\in \Z$ and maps to the relevant $1\in R$
+for any commutative unital zero-divisor-free factorial ring over which we consider the cyclotomic
+polynomial. Hence recall the famous Eisenstein's criterion to look up in your favourite
+algebra reference, with a minute simplification assuming there is a coefficient $a_i=1$.
+\prop{
+    Let $A$ be a factorial ring with quotient field $K$: $A\hookrightarrow Quot(A)=K$.
+    Let $f=\sum_ia_iX^i\in A\lbrack X \rbrack$ be a polynomial with coefficients in $A$ of degree $N$
+    such that $a_N = 1$ and $a_0=\pm 1$.
+
+    If there exists $p\in A$ which is indecomposable, satisfying $p|a_i$ for $i=1,\ldots,N-1$, then
+    $f$ is indecomposable over $K\lbrack X \rbrack$ as well as $A\lbrack X \rbrack$.
+    \begin{proof}
+    \end{proof}
+}
+\end{document}
