@@ -108,15 +108,28 @@ For the cyclotomic polynomials there is always
 a coefficient which is exactly $1\in \Z$ and maps to the relevant $1\in R$
 for any commutative unital zero-divisor-free factorial ring over which we consider the cyclotomic
 polynomial. Hence recall the famous Eisenstein's criterion to look up in your favourite
-algebra reference, with a minute simplification assuming there is a coefficient $a_i=1$.
+algebra reference, with simplification to $\Z$ and $\Q$.
 \prop{
-    Let $A$ be a factorial ring with quotient field $K$: $A\hookrightarrow Quot(A)=K$.
-    Let $f=\sum_ia_iX^i\in A\lbrack X \rbrack$ be a polynomial with coefficients in $A$ of degree $N$
-    such that $a_N = 1$ and $a_0=\pm 1$.
+    Let $f=\sum_ia_iX^i\in \Z\lbrack X \rbrack$ be a polynomial with coefficients in $\Z$ of degree $N$
+    which is monic, i.e. a polynomial of degree $N$ such that $a_N = 1$.
 
-    If there exists $p\in A$ which is indecomposable, satisfying $p|a_i$ for $i=1,\ldots,N-1$, then
-    $f$ is indecomposable over $K\lbrack X \rbrack$ as well as $A\lbrack X \rbrack$.
+    Assume $a_0=\pm p$ for $p\in \N$ a prime number, and assume in addition $p|a_i$ for each $a_i$ with
+    $i=1,\ldots,N-1$. Then $f$ is irreducible in $\Z\lbrack X \rbrack$ and $\Q\lbrack X \rbrack$.
     \begin{proof}
+    Let $f=gh$ in $\Q\lbrack X \rbrack$. In fact the factors can be chosen as $g,h\in\Z\lbrack X\rbrack$
+    with both degrees strictly smaller than $f$'s.
+
+    For $p\in\Z$ prime the ideal $(p)\subset \Z$ is a prime ideal, with quotient $\Z/(p) = \mathbb{F}_p$.
+    On coefficients this induces a reduction ring homomorphism:
+    \[ \pi\colon \Z\lbrack X\rbrack \rightarrow \Z/p\lbrack X\rbrack. \]
+    By the assumptions on $f$ get $\pi(f) = X^N$, but also $\pi(g)\pi(h)=X^n$ because $f=gh$ by the
+    assumption before. Since $\mathbb{F}_p\lbrack X \rbrack$ is a euclidean domain it is also factorial,
+    so $\pi(g)=a_i X^i$ and $\pi(h) = b_j X^j$ such that $i+j=N$ and $a_ib_j=1\in\Z/p$.
+
+    Hence we get for the integral $g,h$: $p|g_0$ and $p|h_0$, hence follows $p^2|a_0$, but we assumed
+    $a_0=p$ prime, which is a contradiction. So $f$ was in fact irreducible in $\Z \lbrack X\rbrack$
+    and $\Q \lbrack X\rbrack$.
     \end{proof}
 }
+
 \end{document}
