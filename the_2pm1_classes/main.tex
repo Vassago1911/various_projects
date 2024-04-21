@@ -28,6 +28,7 @@
 \usepackage{svg}
 % \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
 \usepackage{svg-extract}
+\usepackage{stmaryrd}
 \usepackage{hyperref}
 \usepackage{inconsolata}
 
@@ -103,6 +104,60 @@
 
 \begin{document}
 \chapter{2024-04-21 -- Cyclotomic Polynomials}
+\section{Polynomials and power series with integer coefficients}
+\defn{
+    Consider the set $\Z\llbracket X \rrbracket = \{~\sum_{i\geq0}c_iX^i~|~c_i\in\Z~\}$
+    of not necessarily finite sums in the monomials $X^i$ with multiplication defined
+    by $(f(X)g(X))_i = \sum_k f_kg_{i-k}$ for each coefficient index $i\geq0$. It is a
+    commutative ring with unit $1\in\Z \subset \Z\llbracket X \rrbracket$.
+
+    It naturally includes the ring of integral polynomials $\Z\lbrack X \rbrack\subset\Z\llbracket X \rrbracket$,
+    which are integral power series with only finitely many non-zero coefficients and the multiplication
+    as induced from power series. In particular $1\in \Z \subset \Z\lbrack X \rbrack\subset\Z\llbracket X \rrbracket$
+    each have the same unit considered along the canonical subset inclusions.
+}
+
+It is confusing to assemble all the facts about units and primes $\Z \subset \Z\lbrack X \rbrack\subset\Z\llbracket X \rrbracket$
+from the literature, so I summarise and prove them here as far as elementarily possible and conveniently enlightening.
+
+\prop{
+    The, multiplicative invertible elements, in short: units of $\Z$ are plain the signs $\Z^\times = \{\pm 1\}$.
+    The units in integral power series are given by $\Z\llbracket X \rrbracket^\times = \{~\sum_{i\geq0}c_iX^i~|~c_i\in\Z~\wedge~c_0\in\{\pm1\}~\}$.
+    Since each non-constant power series which is a unit in power series is either not a polynomial itself, or its inverse is a properly
+    infinite power series, get $\Z\lbrack X\rbrack^\times = \Z^\times = \{\pm1\}$.
+    \begin{proof}
+    Clearly the units in $\Z$ are exactly the non-zero elements $n$, which can be inverted in $\Z$, i.e. where $\frac1n \in \Q\cap\Z$.
+    So $|n|\geq2$ is clearly not invertible in $\Z$, $0$ is not invertible anywhere, but $-1,1$ clearly are each their own multiplicative
+    inverse in any unital ring.
+
+    Let $p = \sum c_i X^i$ be an integral power series which is a unit, i.e. for which there is a unique $q = \sum d_i X^i$, such that:
+    \[ p\cdot q = \sum_{i,j} c_i\cdot d_j X^{i+j} = 1.\]
+    In degree $0$ it follows:
+    \[ c_0d_0 = 1, \]
+    since the units of $\Z$ are $\{\pm1\}$ without loss of generality we can assume $c_0=d_0=1$ by multiplying $p,q$ each by $-1$. In particular
+    the subset inclusion follows \[\Z\llbracket X \rrbracket^\times \subset \{~\sum_{i\geq0}c_iX^i~|~c_i\in\Z~\wedge~c_0\in\{\pm1\}~\}\].
+
+    For the $\supset$-inclusion consider without loss of generality a $p = 1+\sum_{i\geq1}c_iX^i$ by multiplying with $-1$ if necessary.
+    As above we find necessarily an inverse power series has to start with the same constant term $d_0 = 1$. Hence we get in degree $1$:
+    \[ d_1 = -c_1. \]
+    It follows in degree $2$:
+    \[ c_0d_2 + c_1d_1 + c_2d_0 = 0 \]
+    giving
+    \[ d_2 = c_1^2 - c_2. \]
+
+    Inductively assume $d_i$ determined up to $n-1$ and consider degree $n$:
+    \[ 0 = \sum_{i=0,\ldots,n}c_id_{n-i} = d_n + \sum_{i=0,\ldots,n-1}c_id_{n-i} \]
+    which gives
+    \[ d_n = -\sum_{i=0,\ldots,n-1}c_id_{n-i}. \]
+
+    Then $q(X)=\sum_n d_nX^n$ satisfies $pq=1$ by the inductive construction of its coefficients, so $p$ is a unit in integral power series.
+
+    Finally consider $p\in \Z\lbrack X \rbrack^\times$. Clearly, since $p$ is invertible in $\Z\lbrack X \rbrack$, it remains
+    invertible in $\Z\llbracket X \rrbracket$. By uniqueness of inverses we get $pq=1$ with $q$ another polynomial with integer
+    coefficients. 
+    \end{proof}
+}
+
 \section{Explicit construction}
 \defn{
 Call a polynomial $f=\sum_ia_iX^i\in \Z\lbrack X \rbrack$ irreducible
@@ -120,7 +175,7 @@ $f(X-z)=g(X)h(X)$, hence $f(X)=g(X+z)h(X+z)$ decomposes $f$.
 }
 
 \prop{
-If $f=\sum_ia_iX^i$ is irreducible, then so is each of the polynomials given
+If $f=\sum_ia_iX^i$ is irreducible with $a_0=1$, then so is each of the polynomials given
 by inserting a power of $X$: $f_n(X) := f(X^n)$ with $n\geq2$.
 \begin{proof}
 Assume we had a decomposition in $\Z\lbrack X\rbrack$ of $f_n$:
@@ -128,24 +183,13 @@ $\sum_ia_iX^{ni}=f(X^n) = f_n(X) = g(X)h(X).$
 Show that $g,h$ each area also of the form $\bar g(X^n)$ and $\bar h(X^n)$, hence
 $Z = X^n$ gives a decomposition $f(Z)=g(Z)h(Z)$.
 
-By the decomposition get at each $X^k$ with $k$ not a multiple of $n$:
-\[
-\sum_{i+j=k,k~mod~n \neq 0} g_ih_j = 0
-\]
-and
-\[
-\sum_{i+j=ln} g_ih_j = a_l.
-\]
+Assume to contradiction for $g$ and then necessarily $h$ a coefficient $g_i$ and $h_{kn-i}$ both
+not equal to zero and $g_i$ the $i$-minimal coefficient in $g$, such that $i$ is not a multiple
+of $n$.
 
-Since $n\geq 2$, get in particular:
-\[
-\begin{aligned}
-a_0 &=& g_0h_0\\
-0 &=& g_1h_0+g_0h_1.
-\end{aligned}
-\]
-Since $f$ is irreducible by assumption, it is not divible by $X$ in particular, so
-$a_0\neq 0$, and hence $g_0,h_0\neq0$. 
+By multiplying $g,h$ each with a sign, we can assume $1=a_0 = 1\cdot 1 = g_0\cdot h_0$ with
+$g_0=h_0=1$. It follows $g = 1 + g_i X^i + \sum_{j>i}g_j X^j$ and $h = 1 + \sum_{j\geq1}h_jX^j$.
+
 \end{proof}
 }
 
