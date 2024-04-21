@@ -152,11 +152,40 @@ from the literature, so I summarise and prove them here as far as elementarily p
 
     Then $q(X)=\sum_n d_nX^n$ satisfies $pq=1$ by the inductive construction of its coefficients, so $p$ is a unit in integral power series.
 
-    Finally consider $p\in \Z\lbrack X \rbrack^\times$. Clearly, since $p$ is invertible in $\Z\lbrack X \rbrack$, it remains
-    invertible in $\Z\llbracket X \rrbracket$. By uniqueness of inverses we get $pq=1$ with $q$ another polynomial with integer
-    coefficients. 
+    Finally consider $p\in \Z\lbrack X \rbrack^\times$. On non-zero polynomials with integral coefficients we have a well-defined degree, i.e.
+    a map $\nu\colon \Z\lbrack X \rbrack \rightarrow \mathbb{N}$ which satisfies $\nu(f\cdot g)=\nu(f)+\nu(g)$, given by assigning to each
+    polynomial the highest index such that its coefficient is non-zero.
+
+    In particular it follows for $k\in \Z$ and $p\in \Z\lbrack X\rbrack\setminus\{0\}$ arbitary, $0=deg(k)$ and $deg(kf)=deg(f)>0$.
+    For a unit we hence get $0 = deg(1) = deg(pq) = deg(p)+deg(q)$, hence follows $deg(p)=deg(q)=0$ in natural numbers, so
+    $p \in \{\pm1\}$ with no non-trivial higher terms. If $p$ is an integral polynomial invertible considered as a power series,
+    then follows "$deg(q)=\infty$". I.e. if there were a highest non-trivial coefficient for $q$, then $pq=1$ forces $p$ and $q$
+    to be constant and in the units of $\Z$.
     \end{proof}
 }
+
+\rem{
+    Do note how that describes the units in the integral power series ring which are themselves polynomials. Since there
+    is not a well-defined degree map like on polynomials anymore, a $q$ inverting a polynomial $p$ multiplicatively
+    can escape to "infinite degree", i.e. the inductive process describing the $d_n$ does not stop to produce non-trivial coefficients.
+    Thus no non-constant polynomial can have a multiplicative inverse in integral polynomials.
+}
+
+\prop{
+    Let $f=gh$ in integral polynomials with $f=\sum_i f_i X^i,g=\sum_i g_i X^i,h=\sum_i h_i X^i$ each finite sums with integer
+    coefficients. Assume $f_0=1$ and without loss of generality $g_0=h_0=1$. It follows $f,g,h\in \Z\llbracket X \rrbracket^\times$, and
+    $f^{-1}=h^{-1}g^{-1}$ with each factor a properly infinite power series, each having constant term $1$ as well.
+}
+
+\cor{
+    The units of integral power series decompose as \[\Z\lbrack X\rbrack^\times \cong \{\pm1\}\oplus X\Z\lbrack X\rbrack. \]
+    \begin{proof}
+    Let $p$ be a unit in integral power series, i.e. $p = \pm1 + \sum_{i\geq1} c_iX^i = \pm1 + X\sum_ic_iX^{i-1}$ by our proposition above.
+    The decomposition as indicated defines a map into the product, which is evidently injective and surjective. It is also just regarding
+    a formal sum as a sum in a polynomial ring for the inverse map, one could regard the isomorphism as formal nonsense.
+    \end{proof}
+}
+
 
 \section{Explicit construction}
 \defn{
