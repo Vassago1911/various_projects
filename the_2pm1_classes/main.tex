@@ -186,11 +186,19 @@ from the literature, so I summarise and prove them here as far as elementarily p
     \end{proof}
 }
 
+\cor{
+    For a unit $f\in\Z\llbracket X \rrbracket^\times$ get its inverse $g$, then $f(X^n)$ has the same constant term as
+    $f$ does, and $g(X^n)$ is the inverse for $f(X^n)$.
+    \begin{proof}
+    Consider $fg=1$ as $f(X)g(X) = 1$, then follows $f(X^n)g(X^n)=1$, hence the claim.
+    \end{proof}
+}
+
 
 \section{Explicit construction}
 \defn{
-Call a polynomial $f=\sum_ia_iX^i\in \Z\lbrack X \rbrack$ irreducible
-if $f = gh$ for $g,h\in \Z\lbrack X \rbrack$ implies $g=\pm1$ or $h\pm1$.
+Call a polynomial $f=\sum_ia_iX^i\in \Z\lbrack X \rbrack$ with $a_0=1$ irreducible,
+if $f = gh$ for $g,h\in \Z\lbrack X \rbrack$ and $g\not\in\{\pm1\}$ implies $h\in\{\pm1\}$.
 }
 
 \prop{
