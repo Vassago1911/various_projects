@@ -104,6 +104,51 @@
 \begin{document}
 \chapter{2024-04-21 -- Cyclotomic Polynomials}
 \section{Explicit construction}
+\defn{
+Call a polynomial $f=\sum_ia_iX^i\in \Z\lbrack X \rbrack$ irreducible
+if $f = gh$ for $g,h\in \Z\lbrack X \rbrack$ implies $g=\pm1$ or $h\pm1$.
+}
+
+\prop{
+A polynomial $f=\sum_ia_iX^i\in \Z\lbrack X \rbrack$ is irreducible if
+and only if any and hence all of its translates $f_z(X):=f(X-z) ~~z\in\Z$
+are irreducible.
+\begin{proof}
+If $f_z(X)$ were decomposable non-trivially as $f_z(X)=g(X)h(X)$, then get
+$f(X-z)=g(X)h(X)$, hence $f(X)=g(X+z)h(X+z)$ decomposes $f$.
+\end{proof}
+}
+
+\prop{
+If $f=\sum_ia_iX^i$ is irreducible, then so is each of the polynomials given
+by inserting a power of $X$: $f_n(X) := f(X^n)$ with $n\geq2$.
+\begin{proof}
+Assume we had a decomposition in $\Z\lbrack X\rbrack$ of $f_n$:
+$\sum_ia_iX^{ni}=f(X^n) = f_n(X) = g(X)h(X).$
+Show that $g,h$ each area also of the form $\bar g(X^n)$ and $\bar h(X^n)$, hence
+$Z = X^n$ gives a decomposition $f(Z)=g(Z)h(Z)$.
+
+By the decomposition get at each $X^k$ with $k$ not a multiple of $n$:
+\[
+\sum_{i+j=k,k~mod~n \neq 0} g_ih_j = 0
+\]
+and
+\[
+\sum_{i+j=ln} g_ih_j X^ln = a_l.
+\]
+
+Since $n\geq 2$, get in particular:
+\[
+\begin{aligned}
+a_0 &=& g_0h_0\\
+0 &=& g_1h_0+g_0h_1.
+\end{aligned}
+\]
+Since $f$ is irreducible by assumption, it is not divible by $X$ in particular, so
+$a_0\neq 0$, and hence $g_0,h_0\neq0$. 
+\end{proof}
+}
+
 For the cyclotomic polynomials there is always
 a coefficient which is exactly $1\in \Z$ and maps to the relevant $1\in R$
 for any commutative unital zero-divisor-free factorial ring over which we consider the cyclotomic
