@@ -113,9 +113,16 @@
 
     A morphism of crigs $\varphi\colon A \rightarrow B$ is a set map $A\rightarrow B$,
     which is additive and multiplicative morphism with respect to $+$ and $\cdot$.
+
+    Note that just as in groups it follows, if a crig does have either an additive
+    or a multiplicative neutral element, then either of them is unique. Denote the
+    additive neutral element as $0$ for the crigs for which it exists and the multiplicative
+    neutral element as $1$ for the crigs where it exists. Neither condition implies the other,
+    but neither are essential either, since compositions can be promoted to monoids. We shall
+    not need that fact fully generally here, so we will leave it at that.
 }
 
-This observation is a triviality, but a very useful one in absence of zero and unit requirements.
+The following observation is a triviality, but a very useful one in absence of zero and unit requirements.
 
 \prop{
     A map of crigs maps idempotents to idempotents with respect to both addition and multiplication.
@@ -123,7 +130,8 @@ This observation is a triviality, but a very useful one in absence of zero and u
 }
 
 \lem{
-    If a crig $A$ has a zero element, i.e. $(A,+,0)$ is a commutative monoid, then the existence of a surjective crig morphism $\varphi\colon A\rightarrow B$
+    If a crig $A$ has a zero element, i.e. $(A,+,0)$ is a commutative monoid,
+    then the existence of a surjective crig morphism $\varphi\colon A\rightarrow B$
     for an arbitrary crig $B$, implies $B$ has a zero too.
     \begin{proof}
     Surjectivity implies that for each test case $0+b$ there is a preimage $\bar b$ witnessing $0+\bar b = \bar b$ and
@@ -131,7 +139,11 @@ This observation is a triviality, but a very useful one in absence of zero and u
     \end{proof}
 }
 
-Cancellation properties eventually obtain zero and one as consequences rather than choices in crigs.
+\lem{
+    Surjections imply multiplicative units just the same way.
+}
+
+Cancellation properties eventually obtain zero and one as consequences rather than choices in the crig sets we are interested in.
 \defn{
     An associative and commutative composition $(A,+)$ is said to {\bf satisfy cancellation}, if
     \[\forall a,b\in A\colon \exists k \in A\colon a+k=b+k \Rightarrow a=b.\]
@@ -142,12 +154,12 @@ Cancellation properties eventually obtain zero and one as consequences rather th
     A commutative monoid $(A,+,0)$ with the cancellation property we call {\bf strongly non-negative},
     if \[ \forall a,b\in A\colon a+b=0 \Rightarrow a=b=0. \]
     That is, for each element in $A$ its negative is not already an element of A, unless the element is the zero element.
-    This seems to not be too useful multiplicatively.
 }
 
 \lem{
     The trivial crigs $\emptyset,0$ both satisfy cancellation vacuously.
-    The trivial crig $0$ satisfies strong non-negativity with respect to both addition and multiplication vacuously.
+    The trivial crig $0$ satisfies strong non-negativity with respect to both addition and multiplication vacuously, the emptyset
+    fails in providing a neutral element with which to even state the condition.
 
     In any cancellation crig $A$ we have $0=0\cdot1$, hence $0=0\cdot a$ for all $a\in A$, by $(A,\cdot,1)$ being a monoid.
     \begin{proof}
@@ -160,6 +172,22 @@ Cancellation properties eventually obtain zero and one as consequences rather th
     \[ 0 = 0\cdot1\]
     since both have the same image after translation with $0\cdot 1$. Since $1$ is a unit we can write any a as $1\cdot a$
     and by associativity all is proved. \end{proof}
+}
+
+\cor{
+    Consider a crig homomorphism $\varphi\colon A\rightarrow B$ with both crigs satisfying cancellation additively.
+    Then get:
+    If $B$ has a zero, then:
+    \[ \varphi(0)=0 \]
+    if $A$ has an additively neutral element $0$. Similarly
+    if $B$ has a unit, then
+    \[ \varphi(1)=1 \]
+    if $A$ has a multiplicatively neutral element $1$.
+
+    In addition, if $\varphi$ is surjective, the existence of a $0$ or $1$ in $A$ implies one in $B$.
+    \begin{proof}
+    Copy the proof above with all the needed variations to get the result.
+    \end{proof}
 }
 
 \rem{
