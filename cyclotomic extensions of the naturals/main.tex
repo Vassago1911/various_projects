@@ -104,16 +104,82 @@
 
 \begin{document}
 \defn{
-    Consider the category of commutative unital rigs $Crig$. An object is a
-    crig, that is "ring without negatives", i.e. a tuple $(A,+,\cdot,1)$
+    Consider the category of commutative rigs $Crig$. An object is a
+    crig, that is "ring without negatives", i.e. a tuple $(A,+,\cdot)$
     with $A$ a set, maps $+\colon A\times A\rightarrow A$, $\cdot\colon A\times A\rightarrow A$,
     which are associative and distributive in the usual way as for rings.
-    However $(A,+)$ is only required to be a commutative composition, an additive neutral element is not necessarily required,
-    and $(A,\cdot,1)$ is a commutative monoid with neutral element $1$ as is the case for rings, too.
+    However $(A,+)$ and $(A,\cdot)$ are only required to be an associative and commutative composition,
+    neutral elements not required.
 
-    A morphism of unital crigs $\varphi\colon A \rightarrow B$ is a set map $A\rightarrow B$ with $\varphi(1)=1$,
-    which is a monoid morphism with respect to $+$ and $\cdot$.
+    A morphism of crigs $\varphi\colon A \rightarrow B$ is a set map $A\rightarrow B$,
+    which is additive and multiplicative morphism with respect to $+$ and $\cdot$.
 }
+
+This observation is a triviality, but a very useful one in absence of zero and unit requirements.
+
+\prop{
+    A map of crigs maps idempotents to idempotents with respect to both addition and multiplication.
+    I.e. \[\forall e\in A,\varphi\colon A\rightarrow B\colon e^2=e \Rightarrow f(e)^2=f(e). \]
+}
+
+\lem{
+    If a crig $A$ has a zero element, i.e. $(A,+,0)$ is a commutative monoid, then the existence of a surjective crig morphism $\varphi\colon A\rightarrow B$
+    for an arbitrary crig $B$, implies $B$ has a zero too.
+    \begin{proof}
+    Surjectivity implies that for each test case $0+b$ there is a preimage $\bar b$ witnessing $0+\bar b = \bar b$ and
+    implying $0+b=b$ in $B$.
+    \end{proof}
+}
+
+Cancellation properties eventually obtain zero and one as consequences rather than choices in crigs.
+\defn{
+    An associative and commutative composition $(A,+)$ is said to {\bf satisfy cancellation}, if
+    \[\forall a,b\in A\colon \exists k \in A\colon a+k=b+k \Rightarrow a=b.\]
+    That is, no two elements share an additive translate by the same element.
+    This can be true multiplicatively in a crig, too, for the monoid $(A\setminus\{0\},\cdot,1)$, because
+    $0a=0~\forall a\in A$.
+
+    A commutative monoid $(A,+,0)$ with the cancellation property we call {\bf strongly non-negative},
+    if \[ \forall a,b\in A\colon a+b=0 \Rightarrow a=b=0. \]
+    That is, for each element in $A$ its negative is not already an element of A, unless the element is the zero element.
+    This seems to not be too useful multiplicatively.
+}
+
+\lem{
+    The trivial crigs $\emptyset,0$ both satisfy cancellation vacuously.
+    The trivial crig $0$ satisfies strong non-negativity with respect to both addition and multiplication vacuously.
+
+    In any cancellation crig $A$ we have $0=0\cdot1$, hence $0=0\cdot a$ for all $a\in A$, by $(A,\cdot,1)$ being a monoid.
+    \begin{proof}
+    The first two observations are logical trivialities, for the last statement:
+    Assume $A \supset \{0,1,a,b\}$ not all of them necessarily distinct, but not all of them equal by assumption that
+    one can choose two distinct elements in $A$.
+    Note that it follows by distributivity in a crig:
+    \[ 0\cdot1 = (0+0)\cdot1 = 0\cdot1+0\cdot1 \]
+    which by cancellation and existence of $0$ implies:
+    \[ 0 = 0\cdot1\]
+    since both have the same image after translation with $0\cdot 1$. Since $1$ is a unit we can write any a as $1\cdot a$
+    and by associativity all is proved. \end{proof}
+}
+
+\rem{
+    One can stumble into the strongly non-negative property in various ways. It could also be considered
+    a very strong form of torsion-freeness. In case of $\mathbb{N}$ both perspectives coincide, so it
+    does not matter for our study.
+
+    I do not expect this property to be of much use beyond $\mathbb{N}$ and its polynomial crigs, but
+    bipermutative rig categories with objects $\mathbb{N}$ come up easily in $K$-theory constructions,
+    so that case is quite enough motivation to abstract away into an important property like this.
+}
+
+\prop{
+    There is a chain of crigs of natural numbers $\N_{\geq2} \subset \N_{\geq1} \subset \N_{\geq0}=:\N_0 \subset \Z$, and
+    there is no crig map in the reverse direction for any of these inclusions apart from the zero map in the last step.
+    \begin{proof}
+
+    \end{proof}
+}
+
 
 \rem{
     Since the existence of negatives from the onset of a problem is the exception
@@ -137,26 +203,6 @@
 The specific argument identifies a useful property the natural numbers but many other crigs
 enjoy too, cancellation.
 
-\defn{
-    An associative and commutative composition $(A,+)$ is said to {\bf satisfy cancellation}, if
-    \[\forall a,b\in A\colon \exists k \in A\colon a+k=b+k \Rightarrow a=b.\]
-    That is, no two elements share an translate by the same element.
-
-    A commutative monoid $(A,+,0)$ with the cancellation property we call {\bf strongly non-negative},
-    if \[ \forall a,b\in A\colon a+b=0 \Rightarrow a=b=0. \]
-    That is, for each element in $A$ its negative is not already an element of A, unless the element is the zero element.
-}
-
-\rem{
-    One can stumble into the strongle non-negative property in various ways. It could also be considered
-    a very strong form of torsion-freeness. In case of $\mathbb{N}$ both perspectives coincide, so it
-    does not matter for our study.
-
-    I do not expect this property to be of much use beyond $\mathbb{N}$ and its polynomial crigs, but
-    bipermutative rig categories with objects $\mathbb{N}$ come up easily in $K$-theory constructions,
-    so that case is quite enough motivation to abstract away into an important property like this.
-}
-
 \prop{
     Each crig $A$ has an associated crig of polynomials in one variable $A\lbrack X\rbrack$, satisfying the
     usual universal property: There is a crig inclusion $A\rightarrow A\lbrack X\rbrack$,
@@ -165,9 +211,12 @@ enjoy too, cancellation.
     by "evaluating $X$ at $b$":
     \[
     \xymatrix{
-    A\ar[r]\ar[d]&B\ar[d]\\C\ar[r]&D.
+    A\ar[dr]_\varphi \ar[r]&A\lbrack X\rbrack\ar[d]^{ev_b}\\&B.
     }
     \]
+    \begin{proof}
+
+    \end{proof}
 }
 
 \end{document}
