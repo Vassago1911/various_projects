@@ -1,0 +1,173 @@
+% This file is part of beamerthemepureminimalistic.
+
+% If problems/bugs are found or enhancements are desired, please contact
+% me over: https://github.com/kai-tub/latex-beamer-pure-minimalistic
+
+\documentclass[a4paper]{book}
+\include{version}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{Remi}[thm]{Reminder}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{nonex}[thm]{{\bf NON}-Example}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{Exercise}[thm]{Exercise}
+\newtheorem{Code}[thm]{Pseudocode}
+\usepackage{datetime2}
+\usepackage{graphicx}
+\usepackage{svg}
+% \svgpath{{/home/vassago/LATEX/}{/home/vassago/LATEX/svgs/}}
+\usepackage{svg-extract}
+\usepackage{stmaryrd}
+\usepackage{hyperref}
+\usepackage{inconsolata}
+
+\usepackage{tcolorbox}
+
+\usepackage[all]{xy}
+\usepackage{xypic}
+\usepackage{xcolor}
+
+\definecolor{light}{RGB}{0,100,43}
+\definecolor{dark}{RGB}{130,0,100}
+\definecolor{exercise}{RGB}{220,200,255}
+\definecolor{textcolor}{RGB}{0, 150, 128}
+\definecolor{title}{RGB}{150, 0, 128}
+\definecolor{footercolor}{RGB}{0, 128, 64}
+\definecolor{code}{RGB}{240,220,160}
+\definecolor{codebg}{RGB}{50,50,50}
+\definecolor{mathbg}{RGB}{0,10,30}
+\definecolor{mathtext}{RGB}{220,220,250}
+\definecolor{bg}{RGB}{32, 0, 16}
+
+\def\exercise#1{\color{light}{\h\Exercise{\color{exercise}\scshape #1}}\color{textcolor}}
+\def\code#1#2{\color{dark}{\h\Code{\h}\\[.5em]%
+\color{mathtext}#1
+\begin{tcolorbox}[colback=codebg]%
+\color{code}%
+\texttt{#2}%
+\color{textcolor}%
+\end{tcolorbox}\color{textcolor}}}
+
+\def\backtick{`}
+\def\curtime{\DTMdate{2023-09-21} ~\DTMtime{01:42:17}\DTMdisplayzone{-5}{00}}
+\def\light#1{{\color{light}#1}}
+\def\dark#1{{\color{dark}#1}}
+\def\h{\hspace{1em}}
+
+\def\signature{\href{mailto:marc@lange-data.org}{Dr. Marc Lange, marc@lange-data.org}}
+\def\mailsignature{\href{mailto:marc@lange-data.org}{marc@lange-data.org}}
+
+\def\abs#1{\left| #1 \right| }
+\def\floor#1{\lfloor #1 \rfloor }
+
+\newcommand{\lthree}{<\hspace{-5.2pt}3}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\DAG}{\mathcal{DAG}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\H}{\mathbb{H}}
+\renewcommand{\k}{\mathbb{k}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\LL}{\mathcal{L}^1(\Z,\Z)}
+\newcommand{\Set}{\mathrm{Set}}
+
+\renewcommand{\dag}{\mathrm{emb}\mathcal{DAG}}
+
+
+\newcommand{\s}{Set^{\phantom{\leq}}_{\phantom{+}}}
+\newcommand{\spp}{Set=fSet}
+\newcommand{\smp}{Set^{\leq}_{\phantom{+}}}
+\newcommand{\spm}{Set^{\phantom{\leq}}_{+}}
+\newcommand{\smm}{Set^{\leq}_{+}}
+\newcommand{\spmpm}{Set^{\pm}_{\pm}}
+
+\newcommand{\App}{A}
+\newcommand{\Amp}{A^{\leq}_{\phantom{+}}}
+\newcommand{\Apm}{A^{\phantom{\leq}}_{+}}
+\newcommand{\Amm}{A^{\leq}_{+}}
+
+\begin{document}
+\defn{
+    Consider the category of commutative unital rigs $Crig$. An object is a
+    crig, that is "ring without negatives", i.e. a tuple $(A,+,\cdot,1)$
+    with $A$ a set, maps $+\colon A\times A\rightarrow A$, $\cdot\colon A\times A\rightarrow A$,
+    which are associative and distributive in the usual way as for rings.
+    However $(A,+)$ is only required to be a commutative composition, an additive neutral element is not necessarily required,
+    and $(A,\cdot,1)$ is a commutative monoid with neutral element $1$ as is the case for rings, too.
+
+    A morphism of unital crigs $\varphi\colon A \rightarrow B$ is a set map $A\rightarrow B$ with $\varphi(1)=1$,
+    which is a monoid morphism with respect to $+$ and $\cdot$.
+}
+
+\rem{
+    Since the existence of negatives from the onset of a problem is the exception
+    rather than the rule in this text, we shall rarely refer to groups as such. Specifically
+    only commutative groups feature as completions or other monoid quotients which just
+    happen to have additive inverses.
+}
+
+\ex{
+    THE example of study in this text are the natural numbers $\mathbb{N}$. Note that
+    the definition left a tiny amount of wiggle room by not requiring a zero element, hence
+    the set of positive natural numbers $\mathbb{N}_{>0}=\{1,\ldots,n,n+1,\ldots\}$ has
+    a unique natural crig morphism to every other crig. It is given by unitality
+    and induction over the fact that each natural number greater or equal to $2$
+    can be written as a sum of two smaller numbers. In particular the natural numbers
+    including zero $\mathbb{N}=\mathbb{N_0}$ have a unique crig morphism $\mathbb{N}_{>0} \rightarrow \mathbb{N}_0$,
+    but there is no crig map in the reverse direction: Any image of zero $f0$ would have to
+    satisfy $f(0)+f(0) = f(0+0) = f(0)$, but this is not possible in positive natural numbers.
+}
+
+The specific argument identifies a useful property the natural numbers but many other crigs
+enjoy too, cancellation.
+
+\defn{
+    An associative and commutative composition $(A,+)$ is said to {\bf satisfy cancellation}, if
+    \[\forall a,b\in A\colon \exists k \in A\colon a+k=b+k \Rightarrow a=b.\]
+    That is, no two elements share an translate by the same element.
+
+    A commutative monoid $(A,+,0)$ with the cancellation property we call {\bf strongly non-negative},
+    if \[ \forall a,b\in A\colon a+b=0 \Rightarrow a=b=0. \]
+    That is, for each element in $A$ its negative is not already an element of A, unless the element is the zero element.
+}
+
+\rem{
+    One can stumble into the strongle non-negative property in various ways. It could also be considered
+    a very strong form of torsion-freeness. In case of $\mathbb{N}$ both perspectives coincide, so it
+    does not matter for our study.
+
+    I do not expect this property to be of much use beyond $\mathbb{N}$ and its polynomial crigs, but
+    bipermutative rig categories with objects $\mathbb{N}$ come up easily in $K$-theory constructions,
+    so that case is quite enough motivation to abstract away into an important property like this.
+}
+
+\prop{
+    Each crig $A$ has an associated crig of polynomials in one variable $A\lbrack X\rbrack$, satisfying the
+    usual universal property: There is a crig inclusion $A\rightarrow A\lbrack X\rbrack$,
+    and for each crig morphism $\varphi\colon A\rightarrow B$ with target crig $B$
+    and each target element $b\in B$ there exists a unique extension of $\varphi$ given
+    by "evaluating $X$ at $b$":
+    \[
+    \xymatrix{
+    A\ar[r]\ar[d]&B\ar[d]\\C\ar[r]&D.
+    }
+    \]
+}
+
+\end{document}
