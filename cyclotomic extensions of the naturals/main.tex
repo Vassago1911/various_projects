@@ -218,15 +218,27 @@ Many of the objects of our current interest do not have inverses but still satis
     Consider a crig $(A,+,\cdot)$ and an $A$-module $(M,+,0)$ that is a monoid satisfying cancellation.
     Then if $A$ has a zero, we have $\lambda(0,m)=0$ for all $m\in M$,
     as well as $\lambda(a,0)=0 \forall a\in A$.
+    \begin{proof}
+    For arbitrary $a\in A, m \in M$ note:
+    \[ \lambda(a,0)=\lambda(a,0+0)= \lambda(a,0)+\lambda(a,0)=0+\lambda(a,0), \]
+    hence by cancellation in $M$: $\lambda(a,0)=0$.
+    Similarly follows the claim for the zero of $A$.
+    \end{proof}
 }
 
+\rem{
 Note that $2\cdot \colon \mathbb{N}\rightarrow \mathbb{N}$ is a map that is clearly additive, respects
 zeroes and has target a cancellation monoid, however it is not true that the induced module structure satisfies
-$\lambda(1,x)=x\neq 2x !!$. So that in fact has to be part of the structure, if $A$ happens to be unital.
+$\lambda(1,x)=x\neq 2x !!$.
+The example $2\cdot \colon \mathbb{Z}\rightarrow \mathbb{Z}$ shows that also very good additive structure
+cannot help fix the unit in place on a module, so fix it.
+}
 
 \defn{
     For $(A,+,\cdot)$ a unital crig and $\lambda\colon A\times M\rightarrow M$ an $A$-module structure on
     a semigroup $(M,+)$, call the module structure $\lambda$ unital, if $\lambda(1,_)=id_M$.
 }
+
+
 
 \end{document}
