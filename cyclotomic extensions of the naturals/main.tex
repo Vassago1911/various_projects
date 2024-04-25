@@ -119,7 +119,76 @@
 \ex{
     In particular we note that for a ring like structure the absence of invertibles allows for
     maps to not fix units and zeros but still be compatible with addition and multiplication.
-    As an example consider that chain of inclusions $\ldots \supset \N_{>k} \supset \ldots \supset \N_{>0} \supset \N_0$.
+
+    As an example consider that chain of inclusions $\ldots \subset \N_{>k} \subset \ldots \subset \N_{>0} \subset \N_0$.
+    Each of these induces a map which is compatible with addition and multiplication, however
+    a zero is only added in the final step, a unit in the second to last step, in particular, all
+    inclusions before are "unpointed" with respect to such neutral elements.
+
+    Hence introduce a category to host these objects and morphisms.
+}
+\defn{
+    Call a tuple $(A,+,\cdot)$ a crig (commutative ring without negatives) where $A$ is
+    an arbitrary set and $+\colon A\times A \rightarrow A$ and $\cdot\colon A\times A\rightarrow A$
+    are binary composition maps, which are associative and commutative, and satisfy:
+    \[\forall a,b,c\in A\colon a\cdot(b+c)=a\cdot b + a\cdot c. \]
+
+    Call a crig unital, if there exists a unit $1\in A$ with $\forall a\colon 1\cdot a = a$. By
+    commutativity it is necessarily a two-sided unit, hence unique if it exists.
+
+    As usual call a crig a ring if $(A,+,0)$ is in fact a commutative group, that is, a monoid such that
+    each $a\in A$ has a (unique) negative $-a\in A$ such that $a+(-a)=0$.
+
+    In a crig that is unital and a ring it follows as usual $-a = -1\cdot a$, that is the group inverse
+    of $(A,+,0)$ is controlled by only the additive inverse of the multiplicative unit $-1$.
+}
+
+\rem{
+    Similarly a crig can have a zero, which is unique, if it exists, but adding a zero
+    is not much of a problem usually, so we choose not to assign a word to that state of a crig.
+}
+
+\prop{
+    For each crig there is an associated polynomial rig in one variable. More specifically,
+    given a crig $A$ there is a crig $A\lbrack X\rbrack$, such that for each target crig $B$ and a crig
+    morphism $\varphi\colon A\rightarrow B$ and a chosen element $b\in B$, there exists a unique
+    extension morphism$\Phi\colon A\lbrack X\rbrack \rightarrow B$ with $X\mapsto b$.
+    \begin{proof}
+    By the usual abstract nonsense $A\lbrack X\rbrack$ is unique up to crig isomorphism, fixing
+    zeros and units if $A$ has either one, because the canonical isomorphism is induced by the identity $A\rightarrow A$.
+
+    So prove existence, as a set write $A\lbrack X\rbrack := \{~\sum'a_iX^i~|~i\in \N, a_i \in A~\}$ with $\sum'$ denoting
+    finite formal sums and define
+    addition and multiplication as usual for a polynomial ring, negatives, zeroes or units are not required for that definition.
+    Clearly a target crig structure is all that is required to define a unique extending morphism for any choice $X\mapsto b$.
+    \end{proof}
+}
+
+\prop{
+    For each unital crig there is an associated laurent rig in one variable. It satisfies the same
+    universal property as above, except that $b$ is required to be a unit in $B$ and hence the target $B$ also
+    has to be unital for this to be well-defined.
+}
+
+\rem{
+    Note that for the laurent ring over the integers $A=\Z\lbrack t^{\pm1}\rbrack$ we have the proper ideal
+    $2A$ of all laurent polynomials with all coefficients divisible by $2$. Then clearly it makes sense to
+    consider $2A$ as the laurent polynomials on $2\Z$, even though $t\cdot t^{-1} =1$ cannot be interpreted
+    internally to the ring $A$.
+}
+
+\defn{
+    Given a crig $(A,+,\cdot)$ we can consider the category of finitely generated $A$-modules: A finitely generated
+    $A$-module is a tuple $(M,\lambda)$ with $M$ a set
+    such that there exists an $n\in \N$ and a plain set surjection $A^n\rightarrow M$ (not part of the structure),
+    and a map $\lambda \colon A\times M\rightarrow M$ which satisfies $\lambda(ab,m)=\lambda(a,\lambda(b,m)) \forall a,b\in A \forall m \in M$.
+}
+
+Note the sleight of hand that we ignored the additive structure, because it can be induced
+from the module map.
+
+\prop{
+    For each crig $(A,+,\cdot)$ and $A$-module $(M,\lambda)$
 }
 
 \end{document}
