@@ -179,16 +179,52 @@
 
 \defn{
     Given a crig $(A,+,\cdot)$ we can consider the category of finitely generated $A$-modules: A finitely generated
-    $A$-module is a tuple $(M,\lambda)$ with $M$ a set
+    $A$-module is a tuple $(M,+,\lambda)$ with $(M,+)$ an (additively denoted) semigroup,
     such that there exists an $n\in \N$ and a plain set surjection $A^n\rightarrow M$ (not part of the structure),
-    and a map $\lambda \colon A\times M\rightarrow M$ which satisfies $\lambda(ab,m)=\lambda(a,\lambda(b,m)) \forall a,b\in A \forall m \in M$.
+    and a map $\lambda \colon A\times M\rightarrow M$ which satisfies $\lambda(ab,m)=\lambda(a,\lambda(b,m)) \forall a,b\in A \forall m \in M$, and
+    $\lambda(a+b,m)=\lambda(a,m)+\lambda(b,m)\forall a,b\in A \forall m \in M$.
 }
 
-Note the sleight of hand that we ignored the additive structure, because it can be induced
-from the module map.
+Many of the objects of our current interest do not have inverses but still satisfy a property which usually is just as strong.
+
+\defn{
+    A semigroup $(M,\cdot)$ is said to satisfy cancellation, if it satisfies
+    \[ \forall m,n\in M\colon \exists k \in M\colon m\cdot k=n\cdot k \Rightarrow m=n.\]
+}
+
+\ex{
+    The natural numbers $(\N,+,\cdot)$ satisfy cancellation for $+$ because they include into the
+    commutative group $(\Z,+)$. After excluding $0$ the monoid $(\N\setminus\{0\},\cdot)$ satisfies
+    cancellation as well, because it includes into the integral domain $(\Z,+,\cdot)$.
+
+    More generally
+    for a crig with an injective crig morphism to a unital commutative ring $R$,
+    which is an integral domain $A\rightarrow R$, we can restrict the multiplication on $A$ and
+    $\cdot\colon A\setminus \{0\}\times A\setminus \{0\} \rightarrow A$ actually has target within
+    $A\setminus \{0\}$, hence $(A\setminus\{0\},\cdot)$ is in fact a submonoid of $(A,\cdot)$, but only
+    $(A\setminus\{0\},\cdot)$ can satisfy cancellation, which it does under the assumptions on $R$.
+}
+
+\rem{
+    Note that for any ring (i.e., with negatives) $R$ satisfying cancellation with respect to
+    its multiplication is exactly equivalent to not having zero divisors:
+    \[ \forall m,n\in M\colon \exists k \in M\colon m\cdot k=n\cdot k \Rightarrow m=n \]
+    \[ \Leftrightarrow \forall m\in M\colon \exists k \in M\setminus\{0\}\colon m\cdot k=0 \Rightarrow m=0. \]
+}
 
 \prop{
-    For each crig $(A,+,\cdot)$ and $A$-module $(M,\lambda)$
+    Consider a crig $(A,+,\cdot)$ and an $A$-module $(M,+,0)$ that is a monoid satisfying cancellation.
+    Then if $A$ has a zero, we have $\lambda(0,m)=0$ for all $m\in M$,
+    as well as $\lambda(a,0)=0 \forall a\in A$.
+}
+
+Note that $2\cdot \colon \mathbb{N}\rightarrow \mathbb{N}$ is a map that is clearly additive, respects
+zeroes and has target a cancellation monoid, however it is not true that the induced module structure satisfies
+$\lambda(1,x)=x\neq 2x !!$. So that in fact has to be part of the structure, if $A$ happens to be unital.
+
+\defn{
+    For $(A,+,\cdot)$ a unital crig and $\lambda\colon A\times M\rightarrow M$ an $A$-module structure on
+    a semigroup $(M,+)$, call the module structure $\lambda$ unital, if $\lambda(1,_)=id_M$.
 }
 
 \end{document}
