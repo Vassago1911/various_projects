@@ -104,147 +104,22 @@
 
 \begin{document}
 \defn{
-    Consider the category of commutative rigs $Crig$. An object is a
-    crig, that is "ring without negatives", i.e. a tuple $(A,+,\cdot)$
-    with $A$ a set, maps $+\colon A\times A\rightarrow A$, $\cdot\colon A\times A\rightarrow A$,
-    which are associative and distributive in the usual way as for rings.
-    However $(A,+)$ and $(A,\cdot)$ are only required to be an associative and commutative composition,
-    neutral elements not required.
+    Consider the natural numbers $\mathbb{N}=\mathbb{N}_0$, with $+,\cdot$ defined as usual.
+    Then $(\N,+,0)$ is a commutative monoid, as is $(\N,\cdot,1)$, and $+$ and $\cdot$
+    satisfy distributivity just as in a ring, i.e. with negatives for addition.
 
-    A morphism of crigs $\varphi\colon A \rightarrow B$ is a set map $A\rightarrow B$,
-    which is additive and multiplicative morphism with respect to $+$ and $\cdot$.
+    Consider the natural numbers $\mathbb{N}_{>0}$, with $+,\cdot$ defined as usual.
+    Then $(\N,+)$ is a commutative semigroup, $(\N,\cdot,1)$ is a commutative monoid, and $+$ and $\cdot$
+    satisfy distributivity just as in a ring.
 
-    Note that just as in groups it follows, if a crig does have either an additive
-    or a multiplicative neutral element, then either of them is unique. Denote the
-    additive neutral element as $0$ for the crigs for which it exists and the multiplicative
-    neutral element as $1$ for the crigs where it exists. Neither condition implies the other,
-    but neither are essential either, since compositions can be promoted to monoids. We shall
-    not need that fact fully generally here, so we will leave it at that.
+    Consider the natural numbers $\mathbb{N}_{>k}$ for any $k\in \N$ which is at least $1$.
+    Then $(\N,+)$ is a commutative semigroup, as is $(\N,\cdot,1)$, and $+$ and $\cdot$
+    satisfy distributivity just as in a ring.
 }
-
-The following observation is a triviality, but a very useful one in absence of zero and unit requirements.
-
-\prop{
-    A map of crigs maps idempotents to idempotents with respect to both addition and multiplication.
-    I.e. \[\forall e\in A,\varphi\colon A\rightarrow B\colon e^2=e \Rightarrow f(e)^2=f(e). \]
-}
-
-\lem{
-    If a crig $A$ has a zero element, i.e. $(A,+,0)$ is a commutative monoid,
-    then the existence of a surjective crig morphism $\varphi\colon A\rightarrow B$
-    for an arbitrary crig $B$, implies $B$ has a zero too.
-    \begin{proof}
-    Surjectivity implies that for each test case $0+b$ there is a preimage $\bar b$ witnessing $0+\bar b = \bar b$ and
-    implying $0+b=b$ in $B$.
-    \end{proof}
-}
-
-\lem{
-    Surjections imply multiplicative units just the same way.
-}
-
-Cancellation properties eventually obtain zero and one as consequences rather than choices in the crig sets we are interested in.
-\defn{
-    An associative and commutative composition $(A,+)$ is said to {\bf satisfy cancellation}, if
-    \[\forall a,b\in A\colon \exists k \in A\colon a+k=b+k \Rightarrow a=b.\]
-    That is, no two elements share an additive translate by the same element.
-    This can be true multiplicatively in a crig, too, for the monoid $(A\setminus\{0\},\cdot,1)$, because
-    $0a=0~\forall a\in A$.
-
-    A commutative monoid $(A,+,0)$ with the cancellation property we call {\bf strongly non-negative},
-    if \[ \forall a,b\in A\colon a+b=0 \Rightarrow a=b=0. \]
-    That is, for each element in $A$ its negative is not already an element of A, unless the element is the zero element.
-}
-
-\lem{
-    The trivial crigs $\emptyset,0$ both satisfy cancellation vacuously.
-    The trivial crig $0$ satisfies strong non-negativity with respect to both addition and multiplication vacuously, the emptyset
-    fails in providing a neutral element with which to even state the condition.
-
-    In any cancellation crig $A$ we have $0=0\cdot1$, hence $0=0\cdot a$ for all $a\in A$, by $(A,\cdot,1)$ being a monoid.
-    \begin{proof}
-    The first two observations are logical trivialities, for the last statement:
-    Assume $A \supset \{0,1,a,b\}$ not all of them necessarily distinct, but not all of them equal by assumption that
-    one can choose two distinct elements in $A$.
-    Note that it follows by distributivity in a crig:
-    \[ 0\cdot1 = (0+0)\cdot1 = 0\cdot1+0\cdot1 \]
-    which by cancellation and existence of $0$ implies:
-    \[ 0 = 0\cdot1\]
-    since both have the same image after translation with $0\cdot 1$. Since $1$ is a unit we can write any a as $1\cdot a$
-    and by associativity all is proved. \end{proof}
-}
-
-\cor{
-    Consider a crig homomorphism $\varphi\colon A\rightarrow B$ with both crigs satisfying cancellation additively.
-    Then get:
-    If $B$ has a zero, then:
-    \[ \varphi(0)=0 \]
-    if $A$ has an additively neutral element $0$. Similarly
-    if $B$ has a unit, then
-    \[ \varphi(1)=1 \]
-    if $A$ has a multiplicatively neutral element $1$.
-
-    In addition, if $\varphi$ is surjective, the existence of a $0$ or $1$ in $A$ implies one in $B$.
-    \begin{proof}
-    Copy the proof above with all the needed variations to get the result.
-    \end{proof}
-}
-
-\rem{
-    One can stumble into the strongly non-negative property in various ways. It could also be considered
-    a very strong form of torsion-freeness. In case of $\mathbb{N}$ both perspectives coincide, so it
-    does not matter for our study.
-
-    I do not expect this property to be of much use beyond $\mathbb{N}$ and its polynomial crigs, but
-    bipermutative rig categories with objects $\mathbb{N}$ come up easily in $K$-theory constructions,
-    so that case is quite enough motivation to abstract away into an important property like this.
-}
-
-\prop{
-    There is a chain of crigs of natural numbers $\N_{\geq2} \subset \N_{\geq1} \subset \N_{\geq0}=:\N_0 \subset \Z$, and
-    there is no crig map in the reverse direction for any of these inclusions apart from the zero map in the last step.
-    \begin{proof}
-
-    \end{proof}
-}
-
-
-\rem{
-    Since the existence of negatives from the onset of a problem is the exception
-    rather than the rule in this text, we shall rarely refer to groups as such. Specifically
-    only commutative groups feature as completions or other monoid quotients which just
-    happen to have additive inverses.
-}
-
 \ex{
-    THE example of study in this text are the natural numbers $\mathbb{N}$. Note that
-    the definition left a tiny amount of wiggle room by not requiring a zero element, hence
-    the set of positive natural numbers $\mathbb{N}_{>0}=\{1,\ldots,n,n+1,\ldots\}$ has
-    a unique natural crig morphism to every other crig. It is given by unitality
-    and induction over the fact that each natural number greater or equal to $2$
-    can be written as a sum of two smaller numbers. In particular the natural numbers
-    including zero $\mathbb{N}=\mathbb{N_0}$ have a unique crig morphism $\mathbb{N}_{>0} \rightarrow \mathbb{N}_0$,
-    but there is no crig map in the reverse direction: Any image of zero $f0$ would have to
-    satisfy $f(0)+f(0) = f(0+0) = f(0)$, but this is not possible in positive natural numbers.
-}
-
-The specific argument identifies a useful property the natural numbers but many other crigs
-enjoy too, cancellation.
-
-\prop{
-    Each crig $A$ has an associated crig of polynomials in one variable $A\lbrack X\rbrack$, satisfying the
-    usual universal property: There is a crig inclusion $A\rightarrow A\lbrack X\rbrack$,
-    and for each crig morphism $\varphi\colon A\rightarrow B$ with target crig $B$
-    and each target element $b\in B$ there exists a unique extension of $\varphi$ given
-    by "evaluating $X$ at $b$":
-    \[
-    \xymatrix{
-    A\ar[dr]_\varphi \ar[r]&A\lbrack X\rbrack\ar[d]^{ev_b}\\&B.
-    }
-    \]
-    \begin{proof}
-
-    \end{proof}
+    In particular we note that for a ring like structure the absence of invertibles allows for
+    maps to not fix units and zeros but still be compatible with addition and multiplication.
+    As an example consider that chain of inclusions $\ldots \supset \N_{>k} \supset \ldots \supset \N_{>0} \supset \N_0$.
 }
 
 \end{document}
