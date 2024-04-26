@@ -103,6 +103,8 @@
 \newcommand{\Amm}{A^{\leq}_{+}}
 
 \begin{document}
+\chapter{crigs and modules}
+\section{crigs, modules and cancellation}
 \defn{
     Consider the natural numbers $\mathbb{N}=\mathbb{N}_0$, with $+,\cdot$ defined as usual.
     Then $(\N,+,0)$ is a commutative monoid, as is $(\N,\cdot,1)$, and $+$ and $\cdot$
@@ -179,10 +181,13 @@
 
 \defn{
     Given a crig $(A,+,\cdot)$ we can consider the category of finitely generated $A$-modules: A finitely generated
-    $A$-module is a tuple $(M,+,\lambda)$ with $(M,+)$ an (additively denoted) semigroup,
+    $A$-module is a tuple $(M,+,\lambda)$ with $(M,+)$ a commutative (additively denoted) semigroup,
     such that there exists an $n\in \N$ and a plain set surjection $A^n\rightarrow M$ (not part of the structure),
     and a map $\lambda \colon A\times M\rightarrow M$ which satisfies $\lambda(ab,m)=\lambda(a,\lambda(b,m)) \forall a,b\in A \forall m \in M$, and
     $\lambda(a+b,m)=\lambda(a,m)+\lambda(b,m)\forall a,b\in A \forall m \in M$.
+
+    A morphism of $A$ modules for a fixed crig $A$ is a set map $\varphi\colon M\rightarrow N$, with $M$ and $N$ each $A$-modules, such
+    that $\lambda(a,\varphi(m))=\varphi(\lambda(a,m)) \forall a\in A, m\in M$.
 }
 
 Many of the objects of our current interest do not have inverses but still satisfy a property which usually is just as strong.
@@ -239,6 +244,18 @@ cannot help fix the unit in place on a module, so fix it.
     a semigroup $(M,+)$, call the module structure $\lambda$ unital, if $\lambda(1,_)=id_M$.
 }
 
+\ex{
+    We actively want the category of crigs to admit $\emptyset$ and $\mathbb{N}_{\geq2}$ as members. Note how
+    $2\mathbb{N}\subset \mathbb{N}_{\geq2}$ already shows how new submodule structures arise in the absence of negatives.
 
+    Hence we shall take care of zeroes and units next.
+}
+
+\section{crigs, modules and neutrals}
+\prop{
+    Given a crig $(A,+,\cdot)$ and an $A$-module $\lambda\colon A\times M\rightarrow M$ with $M$ a semigroup, there
+    is an $A$-module $M$ with adjoint zero: $M_+:=M\sqcup\{0\}$, with a unique $\lambda \colon A\times M_+ \rightarrow M_+$,
+    making $M_+$ into an $A$-module, such that $\lambda$ restricted to $A\times M$ is the original $A$-module action.
+}
 
 \end{document}
